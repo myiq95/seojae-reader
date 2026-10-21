@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Lumina Reader - 프리미엄 독서 서재</title>
+  <title>Lumina Reader</title>
   
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,18 +19,7 @@
       theme: {
         extend: {
           colors: {
-            sepia: {
-              50: '#fbf8f3',
-              100: '#f4ecd8',
-              200: '#e7d7b5',
-              800: '#433422',
-              900: '#281e13'
-            }
-          },
-          fontFamily: {
-            serif: ['Georgia', 'Cambria', '"Apple SD Gothic Neo"', '"Noto Serif KR"', 'serif'],
-            sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Apple SD Gothic Neo"', 'sans-serif'],
-            system: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"Apple SD Gothic Neo"', 'sans-serif']
+            sepia: { 50:'#fbf8f3', 100:'#f4ecd8', 200:'#e7d7b5', 800:'#433422', 900:'#281e13' }
           }
         }
       }
@@ -52,84 +41,67 @@
     .pt-safe { padding-top: max(1rem, env(safe-area-inset-top)); }
     .pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb { background: rgba(156,163,175,0.4); border-radius: 9999px; }
 
     .bg-art-home {
       background-color: #0f172a;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(14, 165, 233, 0.1) 0px, transparent 50%);
-    }
-
-    .bg-art-library {
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(243, 244, 246, 0.8) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(224, 231, 255, 0.5) 0%, transparent 20%);
-    }
-    .dark .bg-art-library {
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(30, 27, 75, 0.4) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(15, 23, 42, 0.6) 0%, transparent 20%);
+        radial-gradient(at 0% 0%, rgba(99,102,241,0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168,85,247,0.15) 0px, transparent 50%);
     }
 
     .reader-body {
       color: inherit;
+      line-height: 1.85;
     }
     .reader-body p {
-      margin-bottom: 1.25rem;
-      line-height: 1.85;
+      margin-bottom: 1.15rem;
       text-align: justify;
       word-break: keep-all;
       overflow-wrap: break-word;
     }
-
     .reader-body blockquote.dialogue-card {
-      margin: 1.25rem 0;
-      padding: 0.85rem 1.25rem;
+      margin: 1.2rem 0;
+      padding: 0.85rem 1.2rem;
       border-left: 4px solid #6366f1;
-      background-color: rgba(99, 102, 241, 0.06);
+      background-color: rgba(99,102,241,0.07);
       border-radius: 0 0.75rem 0.75rem 0;
-      font-style: normal;
-      line-height: 1.75;
+      line-height: 1.7;
     }
     .dark .reader-body blockquote.dialogue-card {
       border-left-color: #818cf8;
-      background-color: rgba(99, 102, 241, 0.12);
+      background-color: rgba(99,102,241,0.13);
     }
     .theme-sepia .reader-body blockquote.dialogue-card {
       border-left-color: #d97706;
-      background-color: rgba(217, 119, 6, 0.08);
+      background-color: rgba(217,119,6,0.09);
     }
 
-    .reader-body h1.doc-main-title {
-      font-size: 1.85rem;
+    .reader-body h1.doc-title {
+      font-size: 1.9rem;
       font-weight: 800;
       text-align: center;
-      margin: 1.5rem 0 2.5rem 0;
+      margin: 1.5rem 0 2.8rem;
       padding-bottom: 1rem;
-      border-bottom: 2px solid rgba(148, 163, 184, 0.3);
-      letter-spacing: -0.025em;
+      border-bottom: 2px solid rgba(148,163,184,0.25);
     }
-
     .reader-body h2.chapter-header {
-      font-size: 1.3rem;
+      font-size: 1.28rem;
       font-weight: 700;
-      margin: 2.8rem 0 1.4rem 0;
-      padding-top: 0.5rem;
+      margin: 3.2rem 0 1.3rem;
+      padding-top: 0.6rem;
       color: #6366f1;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
+      scroll-margin-top: 5.5rem;
     }
     .dark .reader-body h2.chapter-header { color: #a5b4fc; }
     .theme-sepia .reader-body h2.chapter-header { color: #b45309; }
 
-    .nav-transition {
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    }
+    .nav-transition { transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease; }
     .nav-hidden-top { transform: translateY(-100%); opacity: 0; pointer-events: none; }
     .nav-hidden-bottom { transform: translateY(100%); opacity: 0; pointer-events: none; }
 
@@ -141,7 +113,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen flex flex-col">
+<body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen">
 
   <!-- HOME -->
   <div id="view-home" class="fixed inset-0 z-40 flex flex-col justify-between p-6 bg-art-home overflow-y-auto">
@@ -155,45 +127,43 @@
           <p class="text-xs text-indigo-300/80">Premium Personal Reading Sanctuary</p>
         </div>
       </div>
-      <button onclick="openPrivacyInfo()" class="p-2 text-slate-400 hover:text-white transition-colors rounded-full hover:bg-white/10">
+      <button onclick="openPrivacyInfo()" class="p-2 text-slate-400 hover:text-white rounded-full hover:bg-white/10">
         <i data-lucide="shield-check" class="w-5 h-5"></i>
       </button>
     </div>
 
-    <div class="my-auto py-12 max-w-md mx-auto w-full text-center space-y-8">
+    <div class="my-auto py-10 max-w-md mx-auto w-full text-center space-y-7">
       <div class="space-y-3">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium">
           <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-          <span>독립형 오프라인 PWA 서재</span>
+          <span>독립형 오프라인 서재</span>
         </div>
         <h2 class="text-3xl font-extrabold text-white tracking-tight leading-tight">
-          당신의 독서 순간을<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-300">우아하고 프라이빗하게</span>
+          당신의 독서 순간을<br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-300">우아하고 프라이빗하게</span>
         </h2>
-        <p class="text-sm text-slate-400">
-          개인 서재와 홈화면이 완벽히 분리되어 안전합니다.<br>다양한 문서와 소설을 손쉽게 이어 읽으세요.
-        </p>
+        <p class="text-sm text-slate-400">개인 서재와 홈화면이 분리되어 안전합니다.</p>
       </div>
 
-      <div class="space-y-3 pt-2">
-        <button onclick="switchView('library')" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold shadow-xl shadow-indigo-600/25 flex items-center justify-center gap-3 transition-all active:scale-[0.98]">
+      <div class="space-y-3">
+        <button onclick="switchView('library')" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-xl shadow-indigo-600/25 flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
           <i data-lucide="bookmark" class="w-5 h-5"></i>
           <span>내 서재 열기</span>
-          <span id="home-library-count" class="ml-auto px-2 py-0.5 text-xs bg-white/20 rounded-full font-normal">0권</span>
+          <span id="home-library-count" class="ml-auto px-2 py-0.5 text-xs bg-white/20 rounded-full">0권</span>
         </button>
 
         <div class="grid grid-cols-2 gap-3">
-          <button onclick="document.getElementById('file-input').click()" class="py-3.5 px-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-200 text-sm font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+          <button onclick="document.getElementById('file-input').click()" class="py-3.5 px-4 rounded-2xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-sm font-medium flex items-center justify-center gap-2 active:scale-[0.98]">
             <i data-lucide="folder-open" class="w-4 h-4 text-indigo-400"></i>
             <span>파일 열기</span>
           </button>
-          <button onclick="openPasteModal()" class="py-3.5 px-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-200 text-sm font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+          <button onclick="openPasteModal()" class="py-3.5 px-4 rounded-2xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-sm font-medium flex items-center justify-center gap-2 active:scale-[0.98]">
             <i data-lucide="clipboard-text" class="w-4 h-4 text-violet-400"></i>
             <span>TXT 붙여넣기</span>
           </button>
         </div>
       </div>
-
-      <p class="text-xs text-slate-500 font-mono">지원: TXT, DOCX, PDF, EPUB, MD, HTML (UTF-8 / CP949)</p>
+      <p class="text-xs text-slate-500 font-mono">TXT · DOCX · PDF · EPUB · MD · HTML</p>
     </div>
 
     <input type="file" id="file-input" accept=".txt,.docx,.pdf,.epub,.md,.markdown,.html,.htm" class="hidden" onchange="handleFileSelect(event)">
@@ -201,76 +171,72 @@
     <div class="pb-safe text-center">
       <p class="text-xs text-slate-500 flex items-center justify-center gap-1.5">
         <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-        <span>모든 도서는 기기 내부에만 안전하게 보관됩니다.</span>
+        <span>모든 도서는 기기 내부에만 저장됩니다</span>
       </p>
     </div>
   </div>
 
   <!-- LIBRARY -->
-  <div id="view-library" class="hidden fixed inset-0 z-30 flex flex-col bg-slate-900 bg-art-library text-slate-100 overflow-hidden">
-    <header class="pt-safe px-6 py-4 border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md flex items-center justify-between z-10">
+  <div id="view-library" class="hidden fixed inset-0 z-30 flex flex-col bg-slate-900 text-slate-100 overflow-hidden">
+    <header class="pt-safe px-5 py-4 border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <button onclick="switchView('home')" class="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors">
+        <button onclick="switchView('home')" class="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800">
           <i data-lucide="arrow-left" class="w-5 h-5"></i>
         </button>
         <h2 class="text-lg font-bold text-white font-serif">나의 서재</h2>
       </div>
-      <button onclick="document.getElementById('file-input').click()" class="p-2 text-indigo-400 hover:text-indigo-300 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors flex items-center gap-1.5 text-xs font-semibold px-3">
+      <button onclick="document.getElementById('file-input').click()" class="px-3 py-2 text-indigo-400 bg-indigo-500/10 rounded-xl text-xs font-semibold flex items-center gap-1.5">
         <i data-lucide="plus" class="w-4 h-4"></i>
         <span>책 추가</span>
       </button>
     </header>
 
-    <div class="px-6 pt-4 pb-2 bg-slate-900/50 border-b border-slate-800/50">
-      <div class="flex space-x-1 p-1 bg-slate-800/80 rounded-xl">
-        <button id="tab-reading-btn" onclick="switchLibraryTab('reading')" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-2">
+    <div class="px-5 pt-4 pb-2">
+      <div class="flex p-1 bg-slate-800/80 rounded-xl">
+        <button id="tab-reading-btn" onclick="switchLibraryTab('reading')" class="flex-1 py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white flex items-center justify-center gap-2">
           <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
           <span>읽고 있는 목록</span>
-          <span id="badge-reading-count" class="px-1.5 py-0.2 text-[10px] bg-white/20 rounded-full">0</span>
+          <span id="badge-reading-count" class="px-1.5 text-[10px] bg-white/20 rounded-full">0</span>
         </button>
-        <button id="tab-completed-btn" onclick="switchLibraryTab('completed')" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2">
+        <button id="tab-completed-btn" onclick="switchLibraryTab('completed')" class="flex-1 py-2 text-xs font-semibold rounded-lg text-slate-400 flex items-center justify-center gap-2">
           <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
           <span>다 읽은 목록</span>
-          <span id="badge-completed-count" class="px-1.5 py-0.2 text-[10px] bg-slate-700 rounded-full">0</span>
+          <span id="badge-completed-count" class="px-1.5 text-[10px] bg-slate-700 rounded-full">0</span>
         </button>
       </div>
     </div>
 
-    <div class="flex-1 overflow-y-auto p-6 pb-safe">
-      <div id="library-book-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto"></div>
+    <div class="flex-1 overflow-y-auto p-5 pb-safe">
+      <div id="library-book-grid" class="grid grid-cols-1 gap-3 max-w-2xl mx-auto"></div>
       <div id="library-empty-state" class="hidden py-16 text-center space-y-4">
         <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-slate-500">
           <i data-lucide="book-x" class="w-8 h-8"></i>
         </div>
-        <p class="text-sm text-slate-400">등록된 책이 없습니다.<br>새로운 도서나 텍스트를 불러와 독서를 시작하세요.</p>
-        <button onclick="document.getElementById('file-input').click()" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold">
-          <i data-lucide="file-plus" class="w-4 h-4"></i>
-          <span>파일 추가하기</span>
-        </button>
+        <p class="text-sm text-slate-400">등록된 책이 없습니다.</p>
       </div>
     </div>
   </div>
 
-  <!-- READER -->
-  <div id="view-reader" class="hidden fixed inset-0 z-20 flex flex-col bg-slate-900 text-slate-100 transition-colors duration-300">
+  <!-- READER (전체 스크롤) -->
+  <div id="view-reader" class="hidden fixed inset-0 z-20 flex flex-col bg-slate-900 text-slate-100">
     <header id="reader-top-nav" class="fixed top-0 left-0 right-0 z-30 pt-safe px-4 py-3 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 flex items-center justify-between nav-transition">
       <div class="flex items-center gap-2 min-w-0 flex-1">
-        <button onclick="exitReader()" class="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800/60 transition-colors shrink-0">
+        <button onclick="exitReader()" class="p-2 text-slate-400 hover:text-white rounded-xl shrink-0">
           <i data-lucide="arrow-left" class="w-5 h-5"></i>
         </button>
         <div class="min-w-0 flex-1">
-          <h3 id="reader-book-title" class="text-xs font-bold text-slate-200 line-clamp-2 leading-tight">도서 제목</h3>
-          <p id="reader-chapter-title" class="text-[11px] text-indigo-400 truncate mt-0.5">목차 정보</p>
+          <h3 id="reader-book-title" class="text-xs font-bold text-slate-200 line-clamp-2">도서 제목</h3>
+          <p id="reader-chapter-indicator" class="text-[11px] text-indigo-400 truncate mt-0.5">전체 스크롤</p>
         </div>
       </div>
-      <div class="flex items-center gap-1 shrink-0 ml-2">
-        <button onclick="toggleTOCModal()" class="p-2 text-slate-300 hover:text-white rounded-xl hover:bg-slate-800/60 transition-colors">
+      <div class="flex items-center gap-1 shrink-0">
+        <button onclick="toggleTOCModal()" class="p-2 text-slate-300 hover:text-white rounded-xl">
           <i data-lucide="list-tree" class="w-5 h-5"></i>
         </button>
-        <button onclick="toggleFontSettingsModal()" class="p-2 text-slate-300 hover:text-white rounded-xl hover:bg-slate-800/60 transition-colors">
+        <button onclick="toggleFontSettingsModal()" class="p-2 text-slate-300 hover:text-white rounded-xl">
           <i data-lucide="sliders" class="w-5 h-5"></i>
         </button>
-        <button onclick="toggleTTSBar()" class="p-2 text-indigo-400 hover:text-indigo-300 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors">
+        <button onclick="toggleTTSBar()" class="p-2 text-indigo-400 rounded-xl bg-indigo-500/10">
           <i data-lucide="volume-2" class="w-5 h-5"></i>
         </button>
       </div>
@@ -280,87 +246,73 @@
       <div id="reader-body-content" class="reader-body"></div>
     </main>
 
-    <footer id="reader-bottom-nav" class="fixed bottom-0 left-0 right-0 z-30 pb-safe px-6 py-2.5 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 nav-transition">
-      <div class="flex items-center gap-2">
-        <span id="reader-time-display">00:00</span>
-      </div>
+    <footer id="reader-bottom-nav" class="fixed bottom-0 left-0 right-0 z-30 pb-safe px-5 py-2.5 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 nav-transition">
+      <span id="reader-time-display">00:00</span>
       <div class="flex-1 max-w-xs mx-4 flex items-center gap-3">
         <div class="flex-1 bg-slate-800 h-1.5 rounded-full overflow-hidden">
-          <div id="reader-progress-bar" class="bg-indigo-500 h-full w-0 transition-all duration-200"></div>
+          <div id="reader-progress-bar" class="bg-indigo-500 h-full w-0 transition-all"></div>
         </div>
-        <span id="reader-progress-text" class="text-[11px] font-mono min-w-[3rem] text-right">0.0%</span>
+        <span id="reader-progress-text" class="text-[11px] font-mono w-12 text-right">0%</span>
       </div>
-      <button onclick="toggleCompleteState()" class="p-1.5 text-slate-400 hover:text-emerald-400 transition-colors">
+      <button onclick="toggleCompleteState()" class="p-1.5 text-slate-400 hover:text-emerald-400">
         <i data-lucide="check-circle" class="w-4 h-4"></i>
       </button>
     </footer>
 
     <!-- TTS -->
-    <div id="tts-control-bar" class="hidden fixed bottom-16 left-4 right-4 md:left-auto md:right-8 md:w-96 z-40 p-4 bg-slate-800/95 border border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-lg space-y-3">
+    <div id="tts-control-bar" class="hidden fixed bottom-16 left-4 right-4 md:left-auto md:right-8 md:w-96 z-40 p-4 bg-slate-800/95 border border-slate-700/80 rounded-2xl shadow-2xl space-y-3">
       <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
         <div class="flex items-center gap-2 text-indigo-400 font-semibold text-xs">
           <i data-lucide="volume-2" class="w-4 h-4"></i>
-          <span>시스템 TTS 음성낭독</span>
+          <span>TTS 음성낭독</span>
         </div>
-        <button onclick="toggleTTSBar()" class="text-slate-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
+        <button onclick="toggleTTSBar()" class="text-slate-400 p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
-      <div class="flex items-center justify-center gap-4 py-1">
-        <button onclick="ttsRewind()" class="p-2 text-slate-300 hover:text-white rounded-full bg-slate-700/60">
-          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-        </button>
-        <button id="tts-play-btn" onclick="toggleTTSPlay()" class="p-3 text-white rounded-full bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/30">
-          <i data-lucide="play" class="w-5 h-5 fill-current"></i>
-        </button>
-        <button onclick="ttsForward()" class="p-2 text-slate-300 hover:text-white rounded-full bg-slate-700/60">
-          <i data-lucide="rotate-cw" class="w-4 h-4"></i>
-        </button>
+      <div class="flex items-center justify-center gap-4">
+        <button onclick="ttsRewind()" class="p-2 text-slate-300 rounded-full bg-slate-700/60"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>
+        <button id="tts-play-btn" onclick="toggleTTSPlay()" class="p-3 text-white rounded-full bg-indigo-600"><i data-lucide="play" class="w-5 h-5 fill-current"></i></button>
+        <button onclick="ttsForward()" class="p-2 text-slate-300 rounded-full bg-slate-700/60"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>
       </div>
-      <div class="flex items-center justify-between text-xs text-slate-300 pt-1">
-        <span>속도 조절</span>
+      <div class="flex items-center justify-between text-xs text-slate-300">
+        <span>속도</span>
         <div class="flex gap-1.5">
-          <button onclick="setTTSSpeed(0.8)" class="tts-speed-btn px-2 py-1 rounded bg-slate-700 hover:bg-indigo-600 transition-colors">0.8x</button>
-          <button onclick="setTTSSpeed(1.0)" class="tts-speed-btn px-2 py-1 rounded bg-indigo-600 text-white transition-colors">1.0x</button>
-          <button onclick="setTTSSpeed(1.2)" class="tts-speed-btn px-2 py-1 rounded bg-slate-700 hover:bg-indigo-600 transition-colors">1.2x</button>
-          <button onclick="setTTSSpeed(1.5)" class="tts-speed-btn px-2 py-1 rounded bg-slate-700 hover:bg-indigo-600 transition-colors">1.5x</button>
+          <button onclick="setTTSSpeed(0.8)" class="tts-speed-btn px-2 py-1 rounded bg-slate-700">0.8x</button>
+          <button onclick="setTTSSpeed(1.0)" class="tts-speed-btn px-2 py-1 rounded bg-indigo-600 text-white">1.0x</button>
+          <button onclick="setTTSSpeed(1.2)" class="tts-speed-btn px-2 py-1 rounded bg-slate-700">1.2x</button>
+          <button onclick="setTTSSpeed(1.5)" class="tts-speed-btn px-2 py-1 rounded bg-slate-700">1.5x</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODALS -->
-  <div id="modal-settings" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
-    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-t-3xl md:rounded-3xl p-6 space-y-6 shadow-2xl max-h-[85vh] overflow-y-auto">
+  <!-- SETTINGS MODAL -->
+  <div id="modal-settings" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center">
+    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-t-3xl md:rounded-3xl p-6 space-y-5 max-h-[85vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
           <i data-lucide="sliders" class="w-4 h-4 text-indigo-400"></i>
           <span>독서 환경 설정</span>
         </h3>
-        <button onclick="toggleFontSettingsModal()" class="p-1.5 text-slate-400 hover:text-white rounded-lg">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="toggleFontSettingsModal()" class="p-1.5 text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
 
       <div class="space-y-2">
-        <label class="text-xs font-semibold text-slate-400">테마 모드</label>
+        <label class="text-xs font-semibold text-slate-400">테마</label>
         <div class="grid grid-cols-4 gap-2">
-          <button onclick="setReaderTheme('dark')" class="p-3 rounded-xl border border-slate-700 bg-slate-900 text-slate-200 text-xs font-medium text-center hover:border-indigo-500">다크</button>
-          <button onclick="setReaderTheme('light')" class="p-3 rounded-xl border border-slate-200 bg-white text-slate-900 text-xs font-medium text-center hover:border-indigo-500">라이트</button>
-          <button onclick="setReaderTheme('sepia')" class="p-3 rounded-xl border border-amber-200 bg-sepia-100 text-sepia-900 text-xs font-medium text-center hover:border-amber-500">세피아</button>
-          <button onclick="setReaderTheme('oled')" class="p-3 rounded-xl border border-slate-800 bg-black text-white text-xs font-medium text-center hover:border-indigo-500">OLED</button>
+          <button onclick="setReaderTheme('dark')" class="p-3 rounded-xl border border-slate-700 bg-slate-900 text-xs">다크</button>
+          <button onclick="setReaderTheme('light')" class="p-3 rounded-xl border border-slate-200 bg-white text-slate-900 text-xs">라이트</button>
+          <button onclick="setReaderTheme('sepia')" class="p-3 rounded-xl border border-amber-200 bg-sepia-100 text-sepia-900 text-xs">세피아</button>
+          <button onclick="setReaderTheme('oled')" class="p-3 rounded-xl border border-slate-800 bg-black text-white text-xs">OLED</button>
         </div>
       </div>
 
       <div class="space-y-2">
-        <label class="text-xs font-semibold text-slate-400">글꼴 선택</label>
-        <select id="setting-font-family" onchange="updateReaderStyles()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+        <label class="text-xs font-semibold text-slate-400">글꼴</label>
+        <select id="setting-font-family" onchange="updateReaderStyles()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-200">
           <option value="system">시스템 기본</option>
-          <option value="serif">명조 / 서리프</option>
-          <option value="sans">고딕 / 산세리프</option>
-          <option value="custom">기기 설치 글꼴</option>
+          <option value="serif">명조 (Serif)</option>
+          <option value="sans">고딕 (Sans)</option>
         </select>
-        <input id="setting-custom-font" type="text" placeholder="예: KoPubWorldBatang" onchange="updateReaderStyles()" class="hidden w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 mt-2">
       </div>
 
       <div class="space-y-2">
@@ -368,15 +320,7 @@
           <span class="font-semibold text-slate-400">글자 크기</span>
           <span id="label-font-size" class="text-indigo-400 font-mono">18px</span>
         </div>
-        <input id="setting-font-size" type="range" min="14" max="32" value="18" oninput="updateReaderStyles()" class="w-full accent-indigo-500">
-      </div>
-
-      <div class="space-y-2">
-        <div class="flex justify-between text-xs">
-          <span class="font-semibold text-slate-400">자간</span>
-          <span id="label-letter-spacing" class="text-indigo-400 font-mono">0px</span>
-        </div>
-        <input id="setting-letter-spacing" type="range" min="-1" max="4" step="0.5" value="0" oninput="updateReaderStyles()" class="w-full accent-indigo-500">
+        <input id="setting-font-size" type="range" min="14" max="30" value="18" oninput="updateReaderStyles()" class="w-full accent-indigo-500">
       </div>
 
       <div class="space-y-2">
@@ -384,86 +328,77 @@
           <span class="font-semibold text-slate-400">줄 간격</span>
           <span id="label-line-height" class="text-indigo-400 font-mono">1.85</span>
         </div>
-        <input id="setting-line-height" type="range" min="1.4" max="2.4" step="0.05" value="1.85" oninput="updateReaderStyles()" class="w-full accent-indigo-500">
+        <input id="setting-line-height" type="range" min="1.4" max="2.3" step="0.05" value="1.85" oninput="updateReaderStyles()" class="w-full accent-indigo-500">
       </div>
     </div>
   </div>
 
-  <div id="modal-toc" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-t-3xl md:rounded-3xl p-6 space-y-4 shadow-2xl max-h-[80vh] flex flex-col">
+  <!-- TOC MODAL -->
+  <div id="modal-toc" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-t-3xl md:rounded-3xl p-6 max-h-[80vh] flex flex-col">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
           <i data-lucide="list-tree" class="w-4 h-4 text-indigo-400"></i>
           <span>목차</span>
         </h3>
-        <button onclick="toggleTOCModal()" class="p-1.5 text-slate-400 hover:text-white rounded-lg">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="toggleTOCModal()" class="p-1.5 text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-      <div id="toc-item-list" class="flex-1 overflow-y-auto space-y-1.5 pr-1"></div>
+      <div id="toc-item-list" class="flex-1 overflow-y-auto space-y-1 mt-3 pr-1"></div>
     </div>
   </div>
 
+  <!-- PASTE MODAL -->
   <div id="modal-paste" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 shadow-2xl">
+    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
           <i data-lucide="clipboard-text" class="w-4 h-4 text-violet-400"></i>
-          <span>TXT 직접 붙여넣기</span>
+          <span>TXT 붙여넣기</span>
         </h3>
-        <button onclick="closePasteModal()" class="p-1.5 text-slate-400 hover:text-white rounded-lg">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="closePasteModal()" class="p-1.5 text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-      <div class="space-y-3">
-        <input id="paste-title-input" type="text" placeholder="도서 제목 (선택)" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-        <textarea id="paste-content-input" rows="8" placeholder="소설이나 문서 텍스트를 붙여넣으세요..." class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 resize-none font-mono"></textarea>
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closePasteModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:bg-slate-800">취소</button>
-        <button onclick="processPastedText()" class="px-5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white">독서 시작</button>
+      <input id="paste-title-input" type="text" placeholder="제목 (선택)" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-200">
+      <textarea id="paste-content-input" rows="9" placeholder="텍스트를 붙여넣으세요..." class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-slate-200 resize-none font-mono"></textarea>
+      <div class="flex justify-end gap-2">
+        <button onclick="closePasteModal()" class="px-4 py-2 rounded-xl text-xs text-slate-400">취소</button>
+        <button onclick="processPastedText()" class="px-5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white">독서 시작</button>
       </div>
     </div>
   </div>
 
+  <!-- PRIVACY -->
   <div id="modal-privacy" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 shadow-2xl">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
           <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
-          <span>프라이버시 및 보안 안내</span>
+          <span>프라이버시 안내</span>
         </h3>
-        <button onclick="closePrivacyInfo()" class="p-1.5 text-slate-400 hover:text-white rounded-lg">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="closePrivacyInfo()" class="p-1.5 text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <div class="text-xs text-slate-300 leading-relaxed space-y-2">
-        <p>• <strong>로컬 저장 보장:</strong> 모든 문서 데이터는 서버로 전송되지 않으며 기기 내부에만 저장됩니다.</p>
-        <p>• <strong>홈/서재 분리:</strong> 타인이 앱을 열어도 읽던 책 내용이 바로 노출되지 않습니다.</p>
-        <p>• <strong>인코딩 지원:</strong> UTF-8, CP949(EUC-KR) 자동 감지.</p>
+        <p>• 모든 데이터는 기기 내부(LocalStorage)에만 저장됩니다.</p>
+        <p>• 서버로 전송되지 않습니다.</p>
+        <p>• 홈 화면과 서재가 분리되어 프라이버시를 보호합니다.</p>
       </div>
-      <div class="pt-2 text-right">
-        <button onclick="closePrivacyInfo()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold">확인</button>
+      <div class="text-right">
+        <button onclick="closePrivacyInfo()" class="px-4 py-2 bg-slate-800 text-white rounded-xl text-xs font-semibold">확인</button>
       </div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY_BOOKS = 'lumina_reader_books_v2';
-    const STORAGE_KEY_SETTINGS = 'lumina_reader_settings_v2';
+    const STORAGE_BOOKS = 'lumina_books_v3';
+    const STORAGE_SETTINGS = 'lumina_settings_v3';
 
-    let booksDatabase = [];
+    let books = [];
     let currentBookId = null;
     let currentLibraryTab = 'reading';
-    let currentChapterIndex = 0;
-    let currentChapters = [];
-
+    let currentChapters = [];          // [{id, title}]
     let readerSettings = {
       theme: 'dark',
       fontFamily: 'system',
-      customFont: '',
       fontSize: 18,
-      letterSpacing: 0,
       lineHeight: 1.85
     };
 
@@ -472,272 +407,268 @@
     let isTTSPlaying = false;
     let ttsSpeed = 1.0;
 
+    // ==================== INIT ====================
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       loadSettings();
-      loadBooksFromStorage();
+      loadBooks();
       setupScrollListener();
       setupClock();
     });
 
     function loadSettings() {
-      const saved = localStorage.getItem(STORAGE_KEY_SETTINGS);
-      if (saved) {
-        try { readerSettings = { ...readerSettings, ...JSON.parse(saved) }; } catch(e){}
-      }
+      try {
+        const s = localStorage.getItem(STORAGE_SETTINGS);
+        if (s) readerSettings = { ...readerSettings, ...JSON.parse(s) };
+      } catch(e){}
       applySettingsToUI();
     }
 
     function saveSettings() {
-      localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(readerSettings));
+      localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(readerSettings));
     }
 
     function applySettingsToUI() {
       document.getElementById('setting-font-family').value = readerSettings.fontFamily;
       document.getElementById('setting-font-size').value = readerSettings.fontSize;
-      document.getElementById('label-font-size').innerText = `${readerSettings.fontSize}px`;
-      document.getElementById('setting-letter-spacing').value = readerSettings.letterSpacing;
-      document.getElementById('label-letter-spacing').innerText = `${readerSettings.letterSpacing}px`;
+      document.getElementById('label-font-size').innerText = readerSettings.fontSize + 'px';
       document.getElementById('setting-line-height').value = readerSettings.lineHeight;
       document.getElementById('label-line-height').innerText = readerSettings.lineHeight;
-
-      if (readerSettings.fontFamily === 'custom') {
-        document.getElementById('setting-custom-font').classList.remove('hidden');
-        document.getElementById('setting-custom-font').value = readerSettings.customFont;
-      } else {
-        document.getElementById('setting-custom-font').classList.add('hidden');
-      }
-
       setReaderTheme(readerSettings.theme, false);
       updateReaderStyles();
     }
 
-    function loadBooksFromStorage() {
-      const saved = localStorage.getItem(STORAGE_KEY_BOOKS);
-      if (saved) {
-        try { booksDatabase = JSON.parse(saved); } catch(e){ booksDatabase = []; }
-      }
-      updateHomeLibraryBadge();
-      renderLibraryGrid();
+    function loadBooks() {
+      try {
+        const s = localStorage.getItem(STORAGE_BOOKS);
+        if (s) books = JSON.parse(s);
+      } catch(e){ books = []; }
+      updateHomeBadge();
+      renderLibrary();
     }
 
-    function saveBooksToStorage() {
-      localStorage.setItem(STORAGE_KEY_BOOKS, JSON.stringify(booksDatabase));
-      updateHomeLibraryBadge();
+    function saveBooks() {
+      localStorage.setItem(STORAGE_BOOKS, JSON.stringify(books));
+      updateHomeBadge();
     }
 
-    function updateHomeLibraryBadge() {
-      document.getElementById('home-library-count').innerText = `${booksDatabase.length}권`;
+    function updateHomeBadge() {
+      document.getElementById('home-library-count').innerText = books.length + '권';
     }
 
-    function switchView(viewName) {
-      document.getElementById('view-home').classList.add('hidden');
-      document.getElementById('view-library').classList.add('hidden');
-      document.getElementById('view-reader').classList.add('hidden');
-
-      if (viewName === 'home') document.getElementById('view-home').classList.remove('hidden');
-      else if (viewName === 'library') {
-        renderLibraryGrid();
-        document.getElementById('view-library').classList.remove('hidden');
-      } else if (viewName === 'reader') {
-        document.getElementById('view-reader').classList.remove('hidden');
-      }
+    // ==================== VIEW ====================
+    function switchView(name) {
+      ['view-home','view-library','view-reader'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById('view-' + name).classList.remove('hidden');
+      if (name === 'library') renderLibrary();
     }
 
     function switchLibraryTab(tab) {
       currentLibraryTab = tab;
-      const readingBtn = document.getElementById('tab-reading-btn');
-      const completedBtn = document.getElementById('tab-completed-btn');
-
+      const r = document.getElementById('tab-reading-btn');
+      const c = document.getElementById('tab-completed-btn');
       if (tab === 'reading') {
-        readingBtn.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-2";
-        completedBtn.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2";
+        r.className = "flex-1 py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white flex items-center justify-center gap-2";
+        c.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-slate-400 flex items-center justify-center gap-2";
       } else {
-        completedBtn.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-2";
-        readingBtn.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2";
+        c.className = "flex-1 py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white flex items-center justify-center gap-2";
+        r.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-slate-400 flex items-center justify-center gap-2";
       }
-      renderLibraryGrid();
+      renderLibrary();
     }
 
-    /* ========== 인코딩 자동 감지 (UTF-8 → CP949) ========== */
-    async function readTextFileWithEncoding(file) {
-      const arrayBuffer = await file.arrayBuffer();
-      const uint8 = new Uint8Array(arrayBuffer);
-
+    // ==================== FILE HANDLING ====================
+    async function readTextWithEncoding(file) {
+      const buf = await file.arrayBuffer();
+      const u8 = new Uint8Array(buf);
       try {
-        return new TextDecoder('utf-8', { fatal: true }).decode(uint8);
-      } catch (e) {}
-
-      try {
-        return new TextDecoder('euc-kr').decode(uint8);
-      } catch (e2) {}
-
-      return new TextDecoder('utf-8').decode(uint8);
+        return new TextDecoder('utf-8', { fatal: true }).decode(u8);
+      } catch(e) {
+        try {
+          return new TextDecoder('euc-kr').decode(u8);
+        } catch(e2) {
+          return new TextDecoder('utf-8').decode(u8);
+        }
+      }
     }
 
-    /* ========== 파일 파서 ========== */
-    async function handleFileSelect(event) {
-      const file = event.target.files[0];
+    async function handleFileSelect(e) {
+      const file = e.target.files[0];
       if (!file) return;
-
-      const fileName = file.name;
-      const ext = fileName.split('.').pop().toLowerCase();
-      let rawText = '';
+      const name = file.name;
+      const ext = name.split('.').pop().toLowerCase();
+      let raw = '';
 
       document.body.style.cursor = 'wait';
-
       try {
         if (ext === 'txt') {
-          rawText = await readTextFileWithEncoding(file);
+          raw = await readTextWithEncoding(file);
         } else if (ext === 'md' || ext === 'markdown') {
-          const mdText = await readTextFileWithEncoding(file);
-          rawText = marked.parse(mdText);
+          const md = await readTextWithEncoding(file);
+          raw = marked.parse(md);
         } else if (ext === 'html' || ext === 'htm') {
-          rawText = await readTextFileWithEncoding(file);
+          raw = await readTextWithEncoding(file);
         } else if (ext === 'docx') {
-          const arrayBuffer = await file.arrayBuffer();
-          const result = await mammoth.convertToHtml({ arrayBuffer });
-          rawText = result.value;
+          const buf = await file.arrayBuffer();
+          const result = await mammoth.convertToHtml({ arrayBuffer: buf });
+          raw = result.value;
         } else if (ext === 'pdf') {
-          rawText = await parsePDFFile(file);
+          raw = await parsePDF(file);
         } else if (ext === 'epub') {
-          rawText = await parseEPUBFile(file);
+          raw = await parseEPUB(file);
         } else {
-          rawText = await readTextFileWithEncoding(file);
+          raw = await readTextWithEncoding(file);
         }
 
-        if (!rawText || rawText.trim().length < 5) {
-          alert('파일에서 읽을 수 있는 텍스트가 없습니다.');
+        if (!raw || raw.trim().length < 10) {
+          alert('읽을 수 있는 텍스트가 없습니다.');
           return;
         }
-
-        addBookToLibrary(fileName.replace(/\.[^/.]+$/, ""), rawText);
+        addBook(name.replace(/\.[^/.]+$/, ''), raw);
       } catch (err) {
         console.error(err);
-        alert('파일을 읽는 도중 오류가 발생했습니다.\n' + err.message);
+        alert('파일 처리 중 오류: ' + err.message);
       } finally {
         document.body.style.cursor = 'default';
-        event.target.value = '';
+        e.target.value = '';
       }
     }
 
-    async function parsePDFFile(file) {
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      let fullText = '';
+    async function parsePDF(file) {
+      const buf = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      let text = '';
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
-        const pageText = content.items.map(item => item.str).join(' ');
-        fullText += pageText + '\n\n';
+        // 줄을 더 자연스럽게 이어주기
+        let lastY = null;
+        let line = '';
+        content.items.forEach(item => {
+          if (lastY !== null && Math.abs(item.transform[5] - lastY) > 5) {
+            text += line.trim() + '\n';
+            line = '';
+          }
+          line += item.str + ' ';
+          lastY = item.transform[5];
+        });
+        if (line.trim()) text += line.trim() + '\n';
+        text += '\n';
       }
-      return fullText;
+      return text;
     }
 
-    async function parseEPUBFile(file) {
-      const arrayBuffer = await file.arrayBuffer();
-      const book = ePub(arrayBuffer);
-      await book.opened;
-      let fullText = '';
-      for (const section of book.spine.spineItems) {
-        try {
-          const doc = await section.load(book.load.bind(book));
-          if (doc && doc.body) fullText += doc.body.innerText + '\n\n';
-        } catch (e) {}
+    async function parseEPUB(file) {
+      try {
+        const buf = await file.arrayBuffer();
+        const book = ePub(buf);
+        await book.ready;
+        let text = '';
+        const spine = book.spine;
+        for (let i = 0; i < spine.length; i++) {
+          const item = spine.get(i);
+          if (!item) continue;
+          try {
+            const doc = await item.load(book.load.bind(book));
+            if (doc && doc.body) {
+              text += doc.body.innerText + '\n\n';
+            }
+          } catch (e) {}
+        }
+        await book.destroy();
+        return text.trim() || 'EPUB에서 텍스트를 추출하지 못했습니다.';
+      } catch (err) {
+        console.error(err);
+        return 'EPUB 파일을 읽는 중 오류가 발생했습니다.\n' + err.message;
       }
-      return fullText || 'EPUB 내용을 추출할 수 없습니다.';
     }
 
-    /* ========== 챕터 파싱 + 본문 HTML 생성 (강화) ========== */
-    function parseChaptersAndFormat(rawText, bookTitle) {
-      // HTML이면 텍스트로 변환 (줄바꿈 최대한 보존)
-      let text = rawText;
-      if (text.includes('<') && text.includes('>')) {
-        const temp = document.createElement('div');
-        temp.innerHTML = text;
-        text = temp.innerText || temp.textContent || text;
+    // ==================== CONTENT PROCESSING (핵심) ====================
+    function processContent(raw, title) {
+      // 1. HTML이면 깨끗하게 텍스트 추출
+      let text = raw;
+      if (/<[a-z][\s\S]*>/i.test(raw)) {
+        const doc = new DOMParser().parseFromString(raw, 'text/html');
+        // script, style 제거
+        doc.querySelectorAll('script, style, noscript').forEach(el => el.remove());
+        text = doc.body ? (doc.body.innerText || doc.body.textContent) : raw;
       }
 
-      // 줄 단위로 분리
-      let lines = text.split(/\r?\n/).map(l => l.trimEnd());
+      // 2. 줄 정리
+      let lines = text
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
+        .split('\n')
+        .map(l => l.replace(/\s+/g, ' ').trim());
 
-      // 빈 줄이 너무 많으면 정리
-      lines = lines.filter((l, i, arr) => {
-        if (l.trim() === '' && i > 0 && arr[i-1].trim() === '') return false;
-        return true;
-      });
-
-      if (lines.length === 0) {
-        return [{
-          title: '본문',
-          html: `<p class="text-slate-400">내용을 불러올 수 없습니다.</p>`
-        }];
+      // 연속 빈 줄 제거
+      const cleaned = [];
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i] === '' && cleaned.length && cleaned[cleaned.length-1] === '') continue;
+        cleaned.push(lines[i]);
       }
+      lines = cleaned;
 
-      // 챕터 감지 정규식
-      const chapterRegex = /^(제\s*\d+\s*[장화편절]|Chapter\s*\d+|\d+\s*[화장편]|#{1,3}\s+.+|제\s*[일이삼사오육칠팔구십]+[장화])/i;
+      // 3. 챕터 감지
+      const chapterRe = /^(제\s*\d+\s*[장화편절]|Chapter\s*\d+|\d+\s*[화장편]|#{1,3}\s+.+$|제\s*[일이삼사오육칠팔구십백]+[장화])/i;
 
-      let chapters = [];
-      let current = { title: '제 1 장', content: [] };
+      const chapters = [];
+      let currentTitle = '본문';
+      let currentLines = [];
+      let chapterIndex = 0;
+
+      function pushChapter() {
+        if (currentLines.length === 0) return;
+        const id = 'ch-' + chapterIndex;
+        chapters.push({
+          id,
+          title: currentTitle,
+          lines: [...currentLines]
+        });
+        chapterIndex++;
+        currentLines = [];
+      }
 
       lines.forEach(line => {
-        const trimmed = line.trim();
-        if (trimmed && chapterRegex.test(trimmed) && trimmed.length < 60) {
-          if (current.content.length > 0) chapters.push(current);
-          current = { title: trimmed, content: [] };
+        if (line && chapterRe.test(line) && line.length < 70) {
+          pushChapter();
+          currentTitle = line;
         } else {
-          current.content.push(line);
+          currentLines.push(line);
         }
       });
-      if (current.content.length > 0) chapters.push(current);
+      pushChapter();
 
-      // 챕터가 1개 이하면 강제로 분할하지 않고 전체를 하나로
-      if (chapters.length <= 1) {
-        chapters = [{
-          title: '본문',
-          content: lines
-        }];
+      if (chapters.length === 0) {
+        chapters.push({ id: 'ch-0', title: '본문', lines });
       }
 
-      // HTML 생성
+      // 4. 전체 HTML 생성 (연속 스크롤용)
+      let fullHtml = `<h1 class="doc-title">${escapeHtml(title)}</h1>`;
+
       chapters.forEach((ch, idx) => {
-        ch.html = buildChapterHTML(bookTitle, ch.title, ch.content, idx === 0);
+        fullHtml += `<h2 class="chapter-header" id="${ch.id}">
+          <i data-lucide="bookmark" class="w-5 h-5"></i>
+          <span>${escapeHtml(ch.title)}</span>
+        </h2>`;
+
+        const dialogueRe = /^[「“"'](.+)[」”"']$/;
+        ch.lines.forEach(line => {
+          if (!line) return;
+          if (dialogueRe.test(line)) {
+            fullHtml += `<blockquote class="dialogue-card">${escapeHtml(line)}</blockquote>`;
+          } else {
+            fullHtml += `<p>${escapeHtml(line)}</p>`;
+          }
+        });
       });
 
-      return chapters;
-    }
-
-    function buildChapterHTML(bookTitle, chapterTitle, lines, isFirst) {
-      let html = '';
-
-      if (isFirst) {
-        html += `<h1 class="doc-main-title">${escapeHtml(bookTitle)}</h1>`;
-      }
-
-      html += `<h2 class="chapter-header"><i data-lucide="bookmark" class="w-5 h-5"></i> ${escapeHtml(chapterTitle)}</h2>`;
-
-      const dialogueRegex = /^[「“"'](.+)[」”"']$/;
-
-      let hasContent = false;
-      lines.forEach(line => {
-        const trimmed = line.trim();
-        if (!trimmed) {
-          // 빈 줄은 간격용으로 한 번만
-          return;
-        }
-        hasContent = true;
-        if (dialogueRegex.test(trimmed)) {
-          html += `<blockquote class="dialogue-card">${escapeHtml(trimmed)}</blockquote>`;
-        } else {
-          html += `<p>${escapeHtml(trimmed)}</p>`;
-        }
-      });
-
-      if (!hasContent) {
-        html += `<p class="text-slate-400 italic">이 챕터에 내용이 없습니다.</p>`;
-      }
-
-      return html;
+      return {
+        fullHtml,
+        chapters: chapters.map(c => ({ id: c.id, title: c.title }))
+      };
     }
 
     function escapeHtml(str) {
@@ -748,74 +679,65 @@
         .replace(/"/g, '&quot;');
     }
 
-    /* ========== 서재 ========== */
-    function addBookToLibrary(title, rawText) {
-      const bookId = 'book_' + Date.now();
-      const chapters = parseChaptersAndFormat(rawText, title || '제목 없음');
-
-      const newBook = {
-        id: bookId,
+    // ==================== LIBRARY ====================
+    function addBook(title, raw) {
+      const processed = processContent(raw, title || '제목 없음');
+      const book = {
+        id: 'book_' + Date.now(),
         title: title || '제목 없음',
         addedDate: new Date().toLocaleDateString(),
         lastReadDate: new Date().toLocaleDateString(),
         completed: false,
         scrollPercent: 0,
-        currentChapterIndex: 0,
-        chapters: chapters
+        fullHtml: processed.fullHtml,
+        chapters: processed.chapters
       };
-
-      booksDatabase.unshift(newBook);
-      saveBooksToStorage();
-      openBook(bookId);
+      books.unshift(book);
+      saveBooks();
+      openBook(book.id);
     }
 
-    function deleteBook(bookId, event) {
-      if (event) event.stopPropagation();
-      if (!confirm('이 책을 서재에서 삭제하시겠습니까?')) return;
-      booksDatabase = booksDatabase.filter(b => b.id !== bookId);
-      saveBooksToStorage();
-      renderLibraryGrid();
+    function deleteBook(id, e) {
+      if (e) e.stopPropagation();
+      if (!confirm('이 책을 삭제하시겠습니까?')) return;
+      books = books.filter(b => b.id !== id);
+      saveBooks();
+      renderLibrary();
     }
 
-    function renderLibraryGrid() {
+    function renderLibrary() {
       const grid = document.getElementById('library-book-grid');
       const empty = document.getElementById('library-empty-state');
       grid.innerHTML = '';
 
-      const filtered = booksDatabase.filter(b => currentLibraryTab === 'completed' ? b.completed : !b.completed);
+      const list = books.filter(b => currentLibraryTab === 'completed' ? b.completed : !b.completed);
+      document.getElementById('badge-reading-count').innerText = books.filter(b => !b.completed).length;
+      document.getElementById('badge-completed-count').innerText = books.filter(b => b.completed).length;
 
-      document.getElementById('badge-reading-count').innerText = booksDatabase.filter(b => !b.completed).length;
-      document.getElementById('badge-completed-count').innerText = booksDatabase.filter(b => b.completed).length;
-
-      if (filtered.length === 0) {
+      if (list.length === 0) {
         empty.classList.remove('hidden');
         return;
       }
       empty.classList.add('hidden');
 
-      filtered.forEach(book => {
-        const percent = Math.round(book.scrollPercent || 0);
+      list.forEach(book => {
+        const pct = Math.round(book.scrollPercent || 0);
         const card = document.createElement('div');
-        card.className = "bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 rounded-2xl p-4 transition-all hover:border-indigo-500/50 flex flex-col justify-between group cursor-pointer shadow-lg";
+        card.className = "bg-slate-800/70 border border-slate-700/60 rounded-2xl p-4 hover:border-indigo-500/40 transition-all cursor-pointer";
         card.onclick = () => openBook(book.id);
-
         card.innerHTML = `
-          <div class="space-y-2">
-            <div class="flex items-start justify-between gap-2">
-              <h3 class="text-sm font-bold text-slate-100 line-clamp-2 leading-snug font-serif group-hover:text-indigo-300">${escapeHtml(book.title)}</h3>
-              <button onclick="deleteBook('${book.id}', event)" class="text-slate-500 hover:text-rose-400 p-1 rounded-lg">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-              </button>
-            </div>
-            <p class="text-[11px] text-slate-400">총 ${book.chapters?.length || 1}개 챕터 • ${book.lastReadDate}</p>
+          <div class="flex justify-between gap-2">
+            <h3 class="text-sm font-bold text-slate-100 line-clamp-2 font-serif">${escapeHtml(book.title)}</h3>
+            <button onclick="deleteBook('${book.id}', event)" class="text-slate-500 hover:text-rose-400 p-1 shrink-0">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-700/40 flex items-center justify-between text-xs">
-            <div class="flex-1 mr-3">
-              <div class="bg-slate-700 h-1.5 rounded-full overflow-hidden">
-                <div class="bg-gradient-to-r from-indigo-500 to-violet-500 h-full" style="width:${percent}%"></div>
-              </div>
+          <p class="text-[11px] text-slate-400 mt-1">${book.chapters?.length || 1}개 챕터 · ${book.lastReadDate}</p>
+          <div class="mt-3 flex items-center gap-3">
+            <div class="flex-1 bg-slate-700 h-1.5 rounded-full overflow-hidden">
+              <div class="bg-gradient-to-r from-indigo-500 to-violet-500 h-full" style="width:${pct}%"></div>
             </div>
-            <span class="text-[11px] text-indigo-400 font-mono">${percent}%</span>
+            <span class="text-[11px] text-indigo-400 font-mono">${pct}%</span>
           </div>
         `;
         grid.appendChild(card);
@@ -823,19 +745,24 @@
       lucide.createIcons();
     }
 
-    /* ========== 리더 ========== */
-    function openBook(bookId) {
-      const book = booksDatabase.find(b => b.id === bookId);
+    // ==================== READER (전체 스크롤) ====================
+    function openBook(id) {
+      const book = books.find(b => b.id === id);
       if (!book) return;
 
-      currentBookId = bookId;
-      currentChapterIndex = book.currentChapterIndex || 0;
+      currentBookId = id;
       currentChapters = book.chapters || [];
 
       document.getElementById('reader-book-title').innerText = book.title;
-      renderCurrentChapter();
+      document.getElementById('reader-chapter-indicator').innerText = `전체 ${currentChapters.length}개 챕터`;
+
+      const body = document.getElementById('reader-body-content');
+      body.innerHTML = book.fullHtml || '<p class="text-slate-400">내용이 없습니다.</p>';
+      lucide.createIcons();
+
       switchView('reader');
 
+      // 이전 스크롤 위치 복원
       setTimeout(() => {
         const container = document.getElementById('reader-scroll-container');
         if (book.scrollPercent > 0) {
@@ -844,73 +771,57 @@
         } else {
           container.scrollTop = 0;
         }
-      }, 80);
-    }
-
-    function renderCurrentChapter() {
-      const body = document.getElementById('reader-body-content');
-      if (!currentChapters || currentChapters.length === 0) {
-        body.innerHTML = `<p class="text-slate-400 py-10 text-center">표시할 내용이 없습니다.</p>`;
-        return;
-      }
-
-      const ch = currentChapters[currentChapterIndex] || currentChapters[0];
-      document.getElementById('reader-chapter-title').innerText = ch.title || '본문';
-      body.innerHTML = ch.html || `<p class="text-slate-400">이 챕터의 내용을 불러올 수 없습니다.</p>`;
-
-      lucide.createIcons();
-      updateReaderProgress();
+        updateProgress();
+      }, 60);
     }
 
     function exitReader() {
-      saveCurrentProgress();
+      saveProgress();
       switchView('library');
     }
 
-    function saveCurrentProgress() {
+    function saveProgress() {
       if (!currentBookId) return;
-      const book = booksDatabase.find(b => b.id === currentBookId);
+      const book = books.find(b => b.id === currentBookId);
       if (!book) return;
 
       const container = document.getElementById('reader-scroll-container');
       const max = container.scrollHeight - container.clientHeight;
-      const percent = max > 0 ? (container.scrollTop / max) * 100 : 0;
+      const pct = max > 0 ? (container.scrollTop / max) * 100 : 0;
 
-      book.scrollPercent = Math.min(100, Math.max(0, percent));
-      book.currentChapterIndex = currentChapterIndex;
+      book.scrollPercent = Math.min(100, Math.max(0, pct));
       book.lastReadDate = new Date().toLocaleDateString();
       if (book.scrollPercent >= 97) book.completed = true;
-
-      saveBooksToStorage();
+      saveBooks();
     }
 
-    function updateReaderProgress() {
+    function updateProgress() {
       const container = document.getElementById('reader-scroll-container');
       const max = container.scrollHeight - container.clientHeight;
-      const percent = max > 0 ? Math.min(100, (container.scrollTop / max) * 100) : 0;
-      document.getElementById('reader-progress-bar').style.width = `${percent}%`;
-      document.getElementById('reader-progress-text').innerText = `${percent.toFixed(1)}%`;
+      const pct = max > 0 ? Math.min(100, (container.scrollTop / max) * 100) : 0;
+      document.getElementById('reader-progress-bar').style.width = pct + '%';
+      document.getElementById('reader-progress-text').innerText = pct.toFixed(0) + '%';
     }
 
     function setupScrollListener() {
       const container = document.getElementById('reader-scroll-container');
-      const topNav = document.getElementById('reader-top-nav');
-      const bottomNav = document.getElementById('reader-bottom-nav');
+      const top = document.getElementById('reader-top-nav');
+      const bottom = document.getElementById('reader-bottom-nav');
 
       container.addEventListener('scroll', () => {
         const y = container.scrollTop;
-        updateReaderProgress();
+        updateProgress();
 
-        if (y > lastScrollY && y > 50) {
+        if (y > lastScrollY && y > 60) {
           if (!isNavHidden) {
-            topNav.classList.add('nav-hidden-top');
-            bottomNav.classList.add('nav-hidden-bottom');
+            top.classList.add('nav-hidden-top');
+            bottom.classList.add('nav-hidden-bottom');
             isNavHidden = true;
           }
         } else {
           if (isNavHidden) {
-            topNav.classList.remove('nav-hidden-top');
-            bottomNav.classList.remove('nav-hidden-bottom');
+            top.classList.remove('nav-hidden-top');
+            bottom.classList.remove('nav-hidden-bottom');
             isNavHidden = false;
           }
         }
@@ -918,7 +829,7 @@
       }, { passive: true });
     }
 
-    /* ========== 테마 ========== */
+    // ==================== THEME & STYLE ====================
     function setReaderTheme(theme, save = true) {
       readerSettings.theme = theme;
       const view = document.getElementById('view-reader');
@@ -931,142 +842,121 @@
       if (theme === 'dark') {
         view.classList.add('bg-slate-900', 'text-slate-100');
         top.className = "fixed top-0 left-0 right-0 z-30 pt-safe px-4 py-3 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 flex items-center justify-between nav-transition";
-        bottom.className = "fixed bottom-0 left-0 right-0 z-30 pb-safe px-6 py-2.5 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 nav-transition";
+        bottom.className = "fixed bottom-0 left-0 right-0 z-30 pb-safe px-5 py-2.5 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 nav-transition";
       } else if (theme === 'light') {
         view.classList.add('bg-white', 'text-slate-900');
-        top.className = "fixed top-0 left-0 right-0 z-30 pt-safe px-4 py-3 bg-white/90 backdrop-blur-md border-b border-slate-200 flex items-center justify-between text-slate-800 nav-transition";
-        bottom.className = "fixed bottom-0 left-0 right-0 z-30 pb-safe px-6 py-2.5 bg-white/90 backdrop-blur-md border-t border-slate-200 flex items-center justify-between text-xs text-slate-600 nav-transition";
+        top.className = "fixed top-0 left-0 right-0 z-30 pt-safe px-4 py-3 bg-white/95 backdrop-blur-md border-b border-slate-200 flex items-center justify-between text-slate-800 nav-transition";
+        bottom.className = "fixed bottom-0 left-0 right-0 z-30 pb-safe px-5 py-2.5 bg-white/95 backdrop-blur-md border-t border-slate-200 flex items-center justify-between text-xs text-slate-600 nav-transition";
       } else if (theme === 'sepia') {
         view.classList.add('bg-sepia-100', 'text-sepia-900', 'theme-sepia');
-        top.className = "fixed top-0 left-0 right-0 z-30 pt-safe px-4 py-3 bg-sepia-100/90 backdrop-blur-md border-b border-sepia-200 flex items-center justify-between text-sepia-900 nav-transition";
-        bottom.className = "fixed bottom-0 left-0 right-0 z-30 pb-safe px-6 py-2.5 bg-sepia-100/90 backdrop-blur-md border-t border-sepia-200 flex items-center justify-between text-xs text-sepia-800 nav-transition";
-      } else if (theme === 'oled') {
+        top.className = "fixed top-0 left-0 right-0 z-30 pt-safe px-4 py-3 bg-sepia-100/95 backdrop-blur-md border-b border-sepia-200 flex items-center justify-between text-sepia-900 nav-transition";
+        bottom.className = "fixed bottom-0 left-0 right-0 z-30 pb-safe px-5 py-2.5 bg-sepia-100/95 backdrop-blur-md border-t border-sepia-200 flex items-center justify-between text-xs text-sepia-800 nav-transition";
+      } else {
         view.classList.add('bg-black', 'text-slate-200');
         top.className = "fixed top-0 left-0 right-0 z-30 pt-safe px-4 py-3 bg-black/90 backdrop-blur-md border-b border-zinc-800 flex items-center justify-between nav-transition";
-        bottom.className = "fixed bottom-0 left-0 right-0 z-30 pb-safe px-6 py-2.5 bg-black/90 backdrop-blur-md border-t border-zinc-800 flex items-center justify-between text-xs text-slate-500 nav-transition";
+        bottom.className = "fixed bottom-0 left-0 right-0 z-30 pb-safe px-5 py-2.5 bg-black/90 backdrop-blur-md border-t border-zinc-800 flex items-center justify-between text-xs text-slate-500 nav-transition";
       }
-
       if (save) saveSettings();
     }
 
     function updateReaderStyles() {
       const body = document.getElementById('reader-body-content');
       readerSettings.fontFamily = document.getElementById('setting-font-family').value;
-      readerSettings.fontSize = parseInt(document.getElementById('setting-font-size').value);
-      readerSettings.letterSpacing = parseFloat(document.getElementById('setting-letter-spacing').value);
-      readerSettings.lineHeight = parseFloat(document.getElementById('setting-line-height').value);
-      readerSettings.customFont = document.getElementById('setting-custom-font').value;
+      readerSettings.fontSize = +document.getElementById('setting-font-size').value;
+      readerSettings.lineHeight = +document.getElementById('setting-line-height').value;
 
-      document.getElementById('label-font-size').innerText = `${readerSettings.fontSize}px`;
-      document.getElementById('label-letter-spacing').innerText = `${readerSettings.letterSpacing}px`;
+      document.getElementById('label-font-size').innerText = readerSettings.fontSize + 'px';
       document.getElementById('label-line-height').innerText = readerSettings.lineHeight;
 
-      let fontStack = "-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif";
-      if (readerSettings.fontFamily === 'serif') fontStack = "Georgia, 'KoPubWorldBatang', 'Noto Serif KR', serif";
-      else if (readerSettings.fontFamily === 'sans') fontStack = "'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif";
-      else if (readerSettings.fontFamily === 'custom' && readerSettings.customFont) fontStack = `"${readerSettings.customFont}", -apple-system, sans-serif`;
+      let stack = "-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif";
+      if (readerSettings.fontFamily === 'serif') stack = "Georgia, 'Noto Serif KR', 'Apple SD Gothic Neo', serif";
+      if (readerSettings.fontFamily === 'sans') stack = "'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif";
 
-      body.style.fontFamily = fontStack;
-      body.style.fontSize = `${readerSettings.fontSize}px`;
-      body.style.letterSpacing = `${readerSettings.letterSpacing}px`;
+      body.style.fontFamily = stack;
+      body.style.fontSize = readerSettings.fontSize + 'px';
       body.style.lineHeight = readerSettings.lineHeight;
-
-      document.getElementById('setting-custom-font').classList.toggle('hidden', readerSettings.fontFamily !== 'custom');
       saveSettings();
     }
 
-    /* ========== TTS ========== */
+    // ==================== TTS ====================
     function toggleTTSBar() {
       document.getElementById('tts-control-bar').classList.toggle('hidden');
     }
-
     function toggleTTSPlay() {
       if (isTTSPlaying) stopTTS();
       else startTTS();
     }
-
     function startTTS() {
-      if (!('speechSynthesis' in window)) {
-        alert('이 브라우저는 TTS를 지원하지 않습니다.');
-        return;
-      }
-      window.speechSynthesis.cancel();
-      const content = document.getElementById('reader-body-content').innerText;
-      if (!content) return;
-
-      const utter = new SpeechSynthesisUtterance(content);
-      utter.lang = 'ko-KR';
-      utter.rate = ttsSpeed;
-      utter.onstart = () => {
+      if (!window.speechSynthesis) return alert('TTS를 지원하지 않는 브라우저입니다.');
+      speechSynthesis.cancel();
+      const text = document.getElementById('reader-body-content').innerText;
+      if (!text) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'ko-KR';
+      u.rate = ttsSpeed;
+      u.onstart = () => {
         isTTSPlaying = true;
-        document.getElementById('tts-play-btn').innerHTML = `<i data-lucide="pause" class="w-5 h-5 fill-current"></i>`;
+        document.getElementById('tts-play-btn').innerHTML = '<i data-lucide="pause" class="w-5 h-5 fill-current"></i>';
         lucide.createIcons();
       };
-      utter.onend = () => {
+      u.onend = () => {
         isTTSPlaying = false;
-        document.getElementById('tts-play-btn').innerHTML = `<i data-lucide="play" class="w-5 h-5 fill-current"></i>`;
+        document.getElementById('tts-play-btn').innerHTML = '<i data-lucide="play" class="w-5 h-5 fill-current"></i>';
         lucide.createIcons();
       };
-      window.speechSynthesis.speak(utter);
+      speechSynthesis.speak(u);
     }
-
     function stopTTS() {
-      window.speechSynthesis.cancel();
+      speechSynthesis.cancel();
       isTTSPlaying = false;
-      document.getElementById('tts-play-btn').innerHTML = `<i data-lucide="play" class="w-5 h-5 fill-current"></i>`;
+      document.getElementById('tts-play-btn').innerHTML = '<i data-lucide="play" class="w-5 h-5 fill-current"></i>';
       lucide.createIcons();
     }
-
-    function setTTSSpeed(speed) {
-      ttsSpeed = speed;
-      document.querySelectorAll('.tts-speed-btn').forEach(btn => {
-        btn.classList.remove('bg-indigo-600', 'text-white');
-        btn.classList.add('bg-slate-700');
+    function setTTSSpeed(s) {
+      ttsSpeed = s;
+      document.querySelectorAll('.tts-speed-btn').forEach(b => {
+        b.classList.remove('bg-indigo-600', 'text-white');
+        b.classList.add('bg-slate-700');
       });
-      if (typeof event !== 'undefined' && event.target) {
-        event.target.classList.add('bg-indigo-600', 'text-white');
-        event.target.classList.remove('bg-slate-700');
-      }
+      event?.target?.classList.add('bg-indigo-600', 'text-white');
       if (isTTSPlaying) startTTS();
     }
-
     function ttsRewind() {
-      document.getElementById('reader-scroll-container').scrollTop -= 350;
+      document.getElementById('reader-scroll-container').scrollTop -= 400;
       if (isTTSPlaying) startTTS();
     }
     function ttsForward() {
-      document.getElementById('reader-scroll-container').scrollTop += 350;
+      document.getElementById('reader-scroll-container').scrollTop += 400;
       if (isTTSPlaying) startTTS();
     }
 
-    /* ========== 모달 ========== */
+    // ==================== MODALS ====================
     function toggleFontSettingsModal() {
       document.getElementById('modal-settings').classList.toggle('hidden');
     }
-
     function toggleTOCModal() {
       const modal = document.getElementById('modal-toc');
       modal.classList.toggle('hidden');
-      if (!modal.classList.contains('hidden')) renderTOCItems();
+      if (!modal.classList.contains('hidden')) renderTOC();
     }
-
-    function renderTOCItems() {
+    function renderTOC() {
       const list = document.getElementById('toc-item-list');
       list.innerHTML = '';
-      if (!currentChapters || currentChapters.length === 0) {
-        list.innerHTML = '<p class="text-xs text-slate-400 py-4 text-center">목차가 없습니다.</p>';
+      if (!currentChapters.length) {
+        list.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">목차가 없습니다</p>';
         return;
       }
-      currentChapters.forEach((ch, idx) => {
+      currentChapters.forEach(ch => {
         const btn = document.createElement('button');
-        btn.className = `w-full text-left px-3.5 py-2.5 rounded-xl text-xs flex items-center justify-between transition-colors ${idx === currentChapterIndex ? 'bg-indigo-600 text-white font-bold' : 'hover:bg-slate-800 text-slate-300'}`;
+        btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-slate-800 flex items-center justify-between";
+        btn.innerHTML = `<span class="truncate">${escapeHtml(ch.title)}</span><i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-50"></i>`;
         btn.onclick = () => {
-          currentChapterIndex = idx;
-          renderCurrentChapter();
+          const el = document.getElementById(ch.id);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
           toggleTOCModal();
-          document.getElementById('reader-scroll-container').scrollTop = 0;
         };
-        btn.innerHTML = `<span class="truncate pr-2">${escapeHtml(ch.title)}</span><i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-60"></i>`;
         list.appendChild(btn);
       });
       lucide.createIcons();
@@ -1074,16 +964,12 @@
 
     function openPasteModal() { document.getElementById('modal-paste').classList.remove('hidden'); }
     function closePasteModal() { document.getElementById('modal-paste').classList.add('hidden'); }
-
     function processPastedText() {
       const title = document.getElementById('paste-title-input').value.trim() || '붙여넣은 문서';
       const content = document.getElementById('paste-content-input').value.trim();
-      if (!content) {
-        alert('텍스트를 입력해주세요.');
-        return;
-      }
+      if (!content) return alert('내용을 입력하세요.');
       closePasteModal();
-      addBookToLibrary(title, content);
+      addBook(title, content);
       document.getElementById('paste-title-input').value = '';
       document.getElementById('paste-content-input').value = '';
     }
@@ -1093,21 +979,21 @@
 
     function toggleCompleteState() {
       if (!currentBookId) return;
-      const book = booksDatabase.find(b => b.id === currentBookId);
+      const book = books.find(b => b.id === currentBookId);
       if (!book) return;
       book.completed = !book.completed;
-      saveBooksToStorage();
+      saveBooks();
       alert(book.completed ? '다 읽은 목록으로 이동했습니다.' : '읽고 있는 목록으로 이동했습니다.');
     }
 
     function setupClock() {
-      const update = () => {
-        const now = new Date();
+      const tick = () => {
+        const n = new Date();
         const el = document.getElementById('reader-time-display');
-        if (el) el.innerText = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+        if (el) el.innerText = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
       };
-      update();
-      setInterval(update, 30000);
+      tick();
+      setInterval(tick, 30000);
     }
   </script>
 </body>
