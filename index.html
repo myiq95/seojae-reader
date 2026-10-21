@@ -1,1088 +1,655 @@
 <!DOCTYPE html>
-<html lang="ko" class="h-full dark">
+<html lang="ko" class="h-full">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Lumina Reader</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0f3ff',
-              100: '#e0e7ff',
-              500: '#6366f1',
-              600: '#4f46e5',
-              700: '#4338ca',
-            },
-            sepia: {
-              base: '#fbf0d9',
-              text: '#433422',
-              card: '#f4e4c1',
-              border: '#e4d2a3'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Lumina Reader - 프리미엄 독서웹앱</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Nanum Myeongjo"', '"Gowun Batang"', '"Noto Serif KR"', 'serif'],
+                        sans: ['"Apple SD Gothic Neo"', 'Inter', 'sans-serif']
+                    }
+                }
             }
-          },
-          fontFamily: {
-            myeongjo: ['"Nanum Myeongjo"', 'serif'],
-            batang: ['"Gowun Batang"', 'serif'],
-            serifkr: ['"Noto Serif KR"', 'serif'],
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
-          }
         }
-      }
-    }
-  </script>
-
-  <!-- Web Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Icons (Lucide) -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- External Parsers -->
-  <!-- PDF.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
-  <!-- JSZip & ePub.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
-  <!-- Mammoth.js for DOCX -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-
-  <style>
-    /* Safe Area & iOS Dynamic Height Adjustments */
-    html, body {
-      height: 100%;
-      height: 100dvh;
-      background-color: #030712;
-      color: #f3f4f6;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .pb-safe {
-      padding-bottom: max(env(safe-area-inset-bottom, 16px), 12px);
-    }
-    
-    .pt-safe {
-      padding-top: max(env(safe-area-inset-top, 16px), 12px);
-    }
-
-    /* iOS Native Smooth Scroll Enforcer */
-    .scrollable-y {
-      overflow-y: auto !important;
-      -webkit-overflow-scrolling: touch !important;
-      touch-action: pan-y !important;
-      overscroll-behavior-y: contain;
-    }
-
-    /* Reading Typography Custom Themes */
-    .reader-theme-dark {
-      background-color: #0f172a !important;
-      color: #cbd5e1 !important;
-    }
-    .reader-theme-light {
-      background-color: #ffffff !important;
-      color: #1e293b !important;
-    }
-    .reader-theme-sepia {
-      background-color: #fbf0d9 !important;
-      color: #433422 !important;
-    }
-    .reader-theme-black {
-      background-color: #000000 !important;
-      color: #a3a3a3 !important;
-    }
-
-    /* Custom Scrollbar for Smooth Reading */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(156, 163, 175, 0.3);
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(156, 163, 175, 0.5);
-    }
-
-    /* Formatted Reader Text Styling */
-    .reader-paragraph {
-      margin-bottom: 1.25em;
-      line-height: inherit;
-      text-align: justify;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-    }
-    
-    .reader-heading {
-      font-weight: 700;
-      margin-top: 2em;
-      margin-bottom: 1em;
-      line-height: 1.3;
-      word-break: keep-all;
-      color: currentColor;
-      border-bottom: 1px solid rgba(150, 150, 150, 0.2);
-      padding-bottom: 0.4em;
-    }
-
-    .reader-dialogue {
-      padding-left: 0.75rem;
-      border-left: 3px solid #6366f1;
-      margin-top: 0.75em;
-      margin-bottom: 0.75em;
-      font-style: normal;
-    }
-  </style>
+    </script>
+    <!-- Google Fonts: 나눔명조, 고운바탕, 노토세리프 -->
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Nanum+Myeongjo:wght@400;700&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- PDF.js, Mammoth, ePub.js, Marked CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/epub.js/0.3.93/epub.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body { font-family: 'Nanum Myeongjo', serif; }
+        .theme-light { background-color: #faf7f2; color: #2b2b2b; }
+        .theme-sepia { background-color: #f4ecd8; color: #5c4033; }
+        .theme-dark { background-color: #1a1a1a; color: #e0e0e0; }
+        .theme-oled { background-color: #000000; color: #f1f5f9; }
+        /* 스크롤바 숨기기 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white h-dvh flex flex-col overflow-hidden">
-
-  <!-- APP ROOT CONTAINER -->
-  <div id="app" class="relative w-full h-dvh flex flex-col overflow-hidden bg-slate-950">
-
-    <!-- TOP HEADER NAVBAR -->
-    <header id="top-nav" class="shrink-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 pt-safe">
-      <div class="flex items-center justify-between px-4 h-14 max-w-5xl mx-auto">
-        <div class="flex items-center gap-2 cursor-pointer" id="btn-brand-home">
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-brand-500/30">
-            L
-          </div>
-          <span class="font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 text-lg">LUMINA</span>
-        </div>
-
-        <div class="flex items-center gap-1">
-          <!-- Reader Specific Quick Controls -->
-          <button id="btn-toc" class="hidden p-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors" title="목차">
-            <i data-lucide="list"></i>
-          </button>
-          <button id="btn-reader-style" class="hidden p-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors" title="보기 설정">
-            <i data-lucide="type"></i>
-          </button>
-          <button id="btn-tts" class="hidden p-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors" title="음성 읽기 (TTS)">
-            <i data-lucide="volume-2"></i>
-          </button>
-          <button id="btn-file-import" class="p-2 rounded-lg bg-brand-600/20 hover:bg-brand-600/30 text-brand-400 hover:text-brand-300 border border-brand-500/30 transition-all text-sm font-medium flex items-center gap-1.5 px-3">
-            <i data-lucide="plus" class="w-4 h-4"></i>
-            <span class="hidden sm:inline">책 열기</span>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- HIDDEN FILE INPUT -->
-    <input type="file" id="file-input" accept=".txt,.epub,.pdf,.docx" class="hidden" />
-
-    <!-- MAIN CONTENT VIEW AREA -->
-    <main class="flex-1 relative w-full h-full min-h-0 overflow-hidden bg-slate-950 flex flex-col">
-      
-      <!-- VIEW 1: HOME / WELCOME DASHBOARD -->
-      <section id="view-home" class="w-full h-full scrollable-y flex flex-col items-center justify-center px-6 text-center py-10">
-        <div class="max-w-md mx-auto flex flex-col items-center my-auto">
-          <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white font-black text-4xl shadow-2xl shadow-brand-500/30 mb-6 animate-pulse">
-            L
-          </div>
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-white mb-3 tracking-tight">몰입을 위한 최적의 독서 공간</h1>
-          <p class="text-sm sm:text-base text-slate-400 mb-8 leading-relaxed">
-            TXT, EPUB, PDF, DOCX 파일의 깔끔한 단락 구분과 한글 목차 파싱으로 한 단계 더 완벽해진 독서를 경험해보세요.
-          </p>
-
-          <div class="flex flex-col w-full gap-3">
-            <button id="btn-home-library" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center gap-2">
-              <i data-lucide="book-open" class="w-5 h-5"></i>
-              내 서재로 이동
-            </button>
-            <button id="btn-home-import" class="w-full py-3.5 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold transition-all flex items-center justify-center gap-2">
-              <i data-lucide="file-plus" class="w-5 h-5"></i>
-              새 파일 바로 읽기
-            </button>
-          </div>
-
-          <div class="mt-8 text-xs text-slate-500 font-mono">
-            Lumina Reader v2.7 • Private Local Storage
-          </div>
-        </div>
-      </section>
-
-      <!-- VIEW 2: MY LIBRARY -->
-      <section id="view-library" class="hidden w-full h-full flex-col max-w-5xl mx-auto p-4 sm:p-6 overflow-hidden">
-        <!-- Library Tabs & Header -->
-        <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3 shrink-0">
-          <h2 class="text-xl font-bold text-white flex items-center gap-2">
-            <i data-lucide="library" class="text-brand-500"></i> 내 서재
-          </h2>
-          <div class="flex gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
-            <button id="tab-lib-reading" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md bg-brand-600 text-white transition-all">읽는 중</button>
-            <button id="tab-lib-completed" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md text-slate-400 hover:text-white transition-all">완독</button>
-          </div>
-        </div>
-
-        <!-- Book List Container -->
-        <div id="library-book-grid" class="flex-1 scrollable-y grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pr-1 pb-6">
-          <!-- Dynamic Book Cards Injected Here -->
-        </div>
-
-        <!-- Empty State -->
-        <div id="library-empty" class="hidden flex-1 flex flex-col items-center justify-center text-slate-500 py-12">
-          <i data-lucide="book-x" class="w-16 h-16 stroke-1 mb-3 text-slate-600"></i>
-          <p class="text-base font-medium">저장된 도서가 없습니다.</p>
-          <p class="text-xs text-slate-600 mt-1">상단의 '책 열기' 버튼을 눌러 도서를 추가해보세요.</p>
-        </div>
-      </section>
-
-      <!-- VIEW 3: IMMERSIVE READER -->
-      <section id="view-reader" class="hidden w-full h-full flex-col relative overflow-hidden bg-slate-900 reader-theme-dark">
-        
-        <!-- Reader Scroll Engine Window -->
-        <div id="reader-scroll-container" class="flex-1 w-full h-full scrollable-y px-4 sm:px-8 py-8 transition-colors duration-200">
-          <div id="reader-content-wrapper" class="max-w-2xl mx-auto leading-relaxed transition-all duration-200 pb-20">
-            <!-- Book HTML Content Rendered Here -->
-          </div>
-        </div>
-
-        <!-- Floating Quick Scroll Jump / Progress Overlay -->
-        <div id="reader-progress-bar-container" class="absolute bottom-0 left-0 right-0 h-1 bg-slate-800/50 z-20">
-          <div id="reader-progress-bar-fill" class="h-full bg-brand-500 transition-all duration-150" style="width: 0%;"></div>
-        </div>
-
-      </section>
-
-    </main>
-
-    <!-- BOTTOM FLOATING FOOTER NAV -->
-    <footer id="bottom-nav" class="shrink-0 z-30 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/80 pb-safe">
-      <div class="flex items-center justify-around h-14 max-w-md mx-auto px-2">
-        <button id="nav-btn-home" class="flex flex-col items-center justify-center w-16 h-full text-brand-400 transition-colors">
-          <i data-lucide="home" class="w-5 h-5"></i>
-          <span class="text-[10px] mt-1 font-medium">홈</span>
-        </button>
-        <button id="nav-btn-library" class="flex flex-col items-center justify-center w-16 h-full text-slate-400 hover:text-slate-200 transition-colors">
-          <i data-lucide="book-marked" class="w-5 h-5"></i>
-          <span class="text-[10px] mt-1 font-medium">서재</span>
-        </button>
-        <button id="nav-btn-reader" class="flex flex-col items-center justify-center w-16 h-full text-slate-400 hover:text-slate-200 transition-colors">
-          <i data-lucide="book-open-check" class="w-5 h-5"></i>
-          <span class="text-[10px] mt-1 font-medium">리더</span>
-        </button>
-      </div>
-    </footer>
-
-    <!-- MODAL 1: TABLE OF CONTENTS (TOC) DRAWER -->
-    <div id="modal-toc" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity">
-      <div class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-slate-900 border-l border-slate-800 flex flex-col p-4 shadow-2xl">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
-          <h3 class="font-bold text-white flex items-center gap-2">
-            <i data-lucide="list" class="w-4 h-4 text-brand-500"></i> 목차
-          </h3>
-          <button id="btn-close-toc" class="p-1 rounded-lg text-slate-400 hover:text-white">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
-        </div>
-        <div id="toc-list-container" class="flex-1 scrollable-y space-y-1 pr-1 text-sm">
-          <!-- Dynamic Chapter Anchors -->
-        </div>
-      </div>
-    </div>
-
-    <!-- MODAL 2: READER DISPLAY SETTINGS -->
-    <div id="modal-settings" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="w-full sm:max-w-md bg-slate-900 border-t sm:border border-slate-800 rounded-t-2xl sm:rounded-2xl p-5 shadow-2xl space-y-5 pb-safe max-h-[90dvh] scrollable-y">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-          <h3 class="font-bold text-white flex items-center gap-2">
-            <i data-lucide="sliders" class="w-4 h-4 text-brand-500"></i> 독서 환경 설정
-          </h3>
-          <button id="btn-close-settings" class="p-1 rounded-lg text-slate-400 hover:text-white">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
-        </div>
-
-        <!-- Font Size Slider -->
-        <div class="space-y-2">
-          <div class="flex justify-between text-xs text-slate-400">
-            <span>글꼴 크기</span>
-            <span id="label-font-size">18px</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-xs font-bold">A-</span>
-            <input type="range" id="input-font-size" min="14" max="32" value="18" class="w-full accent-brand-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            <span class="text-base font-bold">A+</span>
-          </div>
-        </div>
-
-        <!-- Font Line Height & Letter Spacing -->
-        <div class="grid grid-cols-2 gap-3">
-          <div class="space-y-1">
-            <label class="text-xs text-slate-400">줄 간격</label>
-            <select id="select-line-height" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
-              <option value="1.5">좁게 (1.5)</option>
-              <option value="1.8" selected>보통 (1.8)</option>
-              <option value="2.1">넓게 (2.1)</option>
-            </select>
-          </div>
-          <div class="space-y-1">
-            <label class="text-xs text-slate-400">자간</label>
-            <select id="select-letter-spacing" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
-              <option value="-0.02em">좁게</option>
-              <option value="0" selected>보통</option>
-              <option value="0.05em">넓게</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Web Fonts Selection -->
-        <div class="space-y-1.5">
-          <label class="text-xs text-slate-400">글꼴 종류</label>
-          <div class="grid grid-cols-3 gap-2">
-            <button data-font="font-myeongjo" class="btn-font-choice py-2 rounded-lg border text-xs font-myeongjo bg-slate-800 border-brand-500 text-white">나눔명조</button>
-            <button data-font="font-batang" class="btn-font-choice py-2 rounded-lg border border-slate-700 text-xs font-batang text-slate-400 hover:text-white">고운바탕</button>
-            <button data-font="font-serifkr" class="btn-font-choice py-2 rounded-lg border border-slate-700 text-xs font-serifkr text-slate-400 hover:text-white">노토서리프</button>
-          </div>
-        </div>
-
-        <!-- Color Theme Selectors -->
-        <div class="space-y-1.5">
-          <label class="text-xs text-slate-400">테마 색상</label>
-          <div class="grid grid-cols-4 gap-2">
-            <button data-theme="dark" class="btn-theme-choice p-2 rounded-lg border border-brand-500 bg-slate-900 text-slate-200 text-xs flex flex-col items-center gap-1">
-              <span class="w-4 h-4 rounded-full bg-slate-950 border border-slate-700"></span> 다크
-            </button>
-            <button data-theme="sepia" class="btn-theme-choice p-2 rounded-lg border border-slate-700 bg-sepia-base text-sepia-text text-xs flex flex-col items-center gap-1">
-              <span class="w-4 h-4 rounded-full bg-[#fbf0d9] border border-amber-300"></span> 세피아
-            </button>
-            <button data-theme="light" class="btn-theme-choice p-2 rounded-lg border border-slate-700 bg-white text-slate-900 text-xs flex flex-col items-center gap-1">
-              <span class="w-4 h-4 rounded-full bg-white border border-slate-300"></span> 라이트
-            </button>
-            <button data-theme="black" class="btn-theme-choice p-2 rounded-lg border border-slate-700 bg-black text-neutral-400 text-xs flex flex-col items-center gap-1">
-              <span class="w-4 h-4 rounded-full bg-black border border-neutral-800"></span> 블랙
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- MODAL 3: NATIVE SYSTEM TTS CONTROLLER -->
-    <div id="modal-tts" class="fixed bottom-16 left-1/2 -translate-x-1/2 z-40 bg-slate-900/95 border border-slate-700 rounded-2xl p-3 shadow-2xl backdrop-blur-md hidden w-[90%] max-w-sm">
-      <div class="flex items-center justify-between gap-3">
-        <button id="btn-tts-play" class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center hover:bg-brand-500">
-          <i data-lucide="play" class="w-5 h-5 fill-current"></i>
-        </button>
-        <div class="flex-1 min-w-0">
-          <div class="text-xs font-semibold text-slate-200 truncate" id="tts-status">음성 읽기 대기 중</div>
-          <div class="text-[10px] text-slate-400">속도: <span id="label-tts-rate">1.0</span>x</div>
-        </div>
-        <input type="range" id="input-tts-rate" min="0.7" max="1.8" step="0.1" value="1.0" class="w-20 accent-brand-500 h-1 bg-slate-800">
-        <button id="btn-close-tts" class="p-1 rounded-lg text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- LOADING OVERLAY -->
-    <div id="loading-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center hidden">
-      <div class="w-12 h-12 border-4 border-brand-500/20 border-t-brand-500 rounded-full animate-spin mb-3"></div>
-      <p id="loading-text" class="text-sm font-medium text-slate-200">파일 분석 및 변환 중...</p>
-    </div>
-
-  </div>
-
-  <!-- APPLICATION LOGIC -->
-  <script>
-    // Global Application State Store
-    const App = {
-      books: [], // List of book objects saved in localStorage
-      currentBookId: null,
-      currentChapterIndex: 0,
-      readerSettings: {
-        fontSize: 18,
-        lineHeight: 1.8,
-        letterSpacing: '0em',
-        fontFamily: 'font-myeongjo',
-        theme: 'dark'
-      },
-      tts: {
-        synth: window.speechSynthesis,
-        utterance: null,
-        isPlaying: false,
-        rate: 1.0
-      },
-      activeTab: 'reading' // 'reading' | 'completed'
-    };
-
-    // DOM Elements Cache
-    const DOM = {
-      fileInput: document.getElementById('file-input'),
-      btnFileImport: document.getElementById('btn-file-import'),
-      btnBrandHome: document.getElementById('btn-brand-home'),
-      
-      // Views
-      viewHome: document.getElementById('view-home'),
-      viewLibrary: document.getElementById('view-library'),
-      viewReader: document.getElementById('view-reader'),
-
-      // Nav Buttons
-      navHome: document.getElementById('nav-btn-home'),
-      navLibrary: document.getElementById('nav-btn-library'),
-      navReader: document.getElementById('nav-btn-reader'),
-      btnHomeLibrary: document.getElementById('btn-home-library'),
-      btnHomeImport: document.getElementById('btn-home-import'),
-
-      // Header Bar Buttons
-      topNav: document.getElementById('top-nav'),
-      bottomNav: document.getElementById('bottom-nav'),
-      btnToc: document.getElementById('btn-toc'),
-      btnReaderStyle: document.getElementById('btn-reader-style'),
-      btnTts: document.getElementById('btn-tts'),
-
-      // Library Elements
-      libraryGrid: document.getElementById('library-book-grid'),
-      libraryEmpty: document.getElementById('library-empty'),
-      tabLibReading: document.getElementById('tab-lib-reading'),
-      tabLibCompleted: document.getElementById('tab-lib-completed'),
-
-      // Reader Elements
-      scrollContainer: document.getElementById('reader-scroll-container'),
-      contentWrapper: document.getElementById('reader-content-wrapper'),
-      progressFill: document.getElementById('reader-progress-bar-fill'),
-
-      // Modals
-      modalToc: document.getElementById('modal-toc'),
-      btnCloseToc: document.getElementById('btn-close-toc'),
-      tocListContainer: document.getElementById('toc-list-container'),
-
-      modalSettings: document.getElementById('modal-settings'),
-      btnCloseSettings: document.getElementById('btn-close-settings'),
-      inputFontSize: document.getElementById('input-font-size'),
-      labelFontSize: document.getElementById('label-font-size'),
-      selectLineHeight: document.getElementById('select-line-height'),
-      selectLetterSpacing: document.getElementById('select-letter-spacing'),
-
-      modalTts: document.getElementById('modal-tts'),
-      btnTtsPlay: document.getElementById('btn-tts-play'),
-      btnCloseTts: document.getElementById('btn-close-tts'),
-      labelTtsRate: document.getElementById('label-tts-rate'),
-      inputTtsRate: document.getElementById('input-tts-rate'),
-      ttsStatus: document.getElementById('tts-status'),
-
-      loadingOverlay: document.getElementById('loading-overlay'),
-      loadingText: document.getElementById('loading-text')
-    };
-
-    // Initialize App
-    window.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
-      loadStoredData();
-      bindEvents();
-      renderLibrary();
-      applyReaderSettings();
-    });
-
-    // -------------------------------------------------------------
-    // LOCAL STORAGE MANAGEMENT
-    // -------------------------------------------------------------
-    function loadStoredData() {
-      try {
-        const savedBooks = localStorage.getItem('lumina_books');
-        if (savedBooks) App.books = JSON.parse(savedBooks);
-
-        const savedSettings = localStorage.getItem('lumina_settings');
-        if (savedSettings) App.readerSettings = { ...App.readerSettings, ...JSON.parse(savedSettings) };
-      } catch (e) {
-        console.error("Failed to load local storage data", e);
-      }
-    }
-
-    function saveBooksToStorage() {
-      try {
-        localStorage.setItem('lumina_books', JSON.stringify(App.books));
-      } catch (e) {
-        console.warn("Storage quota exceeded or error saving books", e);
-      }
-    }
-
-    function saveSettingsToStorage() {
-      try {
-        localStorage.setItem('lumina_settings', JSON.stringify(App.readerSettings));
-      } catch (e) {
-        console.error("Error saving settings", e);
-      }
-    }
-
-    // -------------------------------------------------------------
-    // NAVIGATION & VIEW SWITCHING (RELIABLE SCROLL-SAFE TRANSITIONS)
-    // -------------------------------------------------------------
-    function switchView(viewName) {
-      DOM.viewHome.classList.add('hidden');
-      DOM.viewHome.classList.remove('flex');
-
-      DOM.viewLibrary.classList.add('hidden');
-      DOM.viewLibrary.classList.remove('flex');
-
-      DOM.viewReader.classList.add('hidden');
-      DOM.viewReader.classList.remove('flex');
-
-      DOM.btnToc.classList.add('hidden');
-      DOM.btnReaderStyle.classList.add('hidden');
-      DOM.btnTts.classList.add('hidden');
-
-      // Reset Nav Active Classes
-      [DOM.navHome, DOM.navLibrary, DOM.navReader].forEach(btn => {
-        btn.classList.remove('text-brand-400');
-        btn.classList.add('text-slate-400');
-      });
-
-      if (viewName === 'home') {
-        DOM.viewHome.classList.remove('hidden');
-        DOM.viewHome.classList.add('flex');
-        DOM.navHome.classList.add('text-brand-400');
-      } else if (viewName === 'library') {
-        DOM.viewLibrary.classList.remove('hidden');
-        DOM.viewLibrary.classList.add('flex');
-        DOM.navLibrary.classList.add('text-brand-400');
-        renderLibrary();
-      } else if (viewName === 'reader') {
-        DOM.viewReader.classList.remove('hidden');
-        DOM.viewReader.classList.add('flex');
-        DOM.navReader.classList.add('text-brand-400');
-
-        DOM.btnToc.classList.remove('hidden');
-        DOM.btnReaderStyle.classList.remove('hidden');
-        DOM.btnTts.classList.remove('hidden');
-      }
-    }
-
-    // -------------------------------------------------------------
-    // FILE PARSER ENGINE
-    // -------------------------------------------------------------
-    function bindEvents() {
-      DOM.btnFileImport.addEventListener('click', () => DOM.fileInput.click());
-      DOM.btnHomeImport.addEventListener('click', () => DOM.fileInput.click());
-      DOM.fileInput.addEventListener('change', handleFileSelect);
-
-      DOM.btnBrandHome.addEventListener('click', () => switchView('home'));
-      DOM.navHome.addEventListener('click', () => switchView('home'));
-      DOM.navLibrary.addEventListener('click', () => switchView('library'));
-      DOM.btnHomeLibrary.addEventListener('click', () => switchView('library'));
-      DOM.navReader.addEventListener('click', () => {
-        if (App.currentBookId) switchView('reader');
-        else alert('읽을 도서를 선택하거나 먼저 파일(.txt, .epub, .pdf, .docx)을 열어주세요.');
-      });
-
-      // Library Tabs
-      DOM.tabLibReading.addEventListener('click', () => {
-        App.activeTab = 'reading';
-        DOM.tabLibReading.className = 'px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md bg-brand-600 text-white transition-all';
-        DOM.tabLibCompleted.className = 'px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md text-slate-400 hover:text-white transition-all';
-        renderLibrary();
-      });
-      DOM.tabLibCompleted.addEventListener('click', () => {
-        App.activeTab = 'completed';
-        DOM.tabLibCompleted.className = 'px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md bg-brand-600 text-white transition-all';
-        DOM.tabLibReading.className = 'px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md text-slate-400 hover:text-white transition-all';
-        renderLibrary();
-      });
-
-      // Reader Scroll & Progress Calculation
-      DOM.scrollContainer.addEventListener('scroll', updateReadingProgress, { passive: true });
-
-      // Reader Controls
-      DOM.btnToc.addEventListener('click', () => DOM.modalToc.classList.remove('hidden'));
-      DOM.btnCloseToc.addEventListener('click', () => DOM.modalToc.classList.add('hidden'));
-
-      DOM.btnReaderStyle.addEventListener('click', () => DOM.modalSettings.classList.remove('hidden'));
-      DOM.btnCloseSettings.addEventListener('click', () => DOM.modalSettings.classList.add('hidden'));
-
-      // Style Setting Changes
-      DOM.inputFontSize.addEventListener('input', (e) => {
-        App.readerSettings.fontSize = parseInt(e.target.value);
-        DOM.labelFontSize.textContent = `${App.readerSettings.fontSize}px`;
-        applyReaderSettings();
-        saveSettingsToStorage();
-      });
-
-      DOM.selectLineHeight.addEventListener('change', (e) => {
-        App.readerSettings.lineHeight = parseFloat(e.target.value);
-        applyReaderSettings();
-        saveSettingsToStorage();
-      });
-
-      DOM.selectLetterSpacing.addEventListener('change', (e) => {
-        App.readerSettings.letterSpacing = e.target.value;
-        applyReaderSettings();
-        saveSettingsToStorage();
-      });
-
-      document.querySelectorAll('.btn-font-choice').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          document.querySelectorAll('.btn-font-choice').forEach(b => {
-            b.classList.remove('border-brand-500', 'text-white');
-            b.classList.add('border-slate-700', 'text-slate-400');
-          });
-          btn.classList.add('border-brand-500', 'text-white');
-          btn.classList.remove('border-slate-700', 'text-slate-400');
-
-          App.readerSettings.fontFamily = btn.dataset.font;
-          applyReaderSettings();
-          saveSettingsToStorage();
-        });
-      });
-
-      document.querySelectorAll('.btn-theme-choice').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.btn-theme-choice').forEach(b => b.classList.remove('border-brand-500'));
-          btn.classList.add('border-brand-500');
-
-          App.readerSettings.theme = btn.dataset.theme;
-          applyReaderSettings();
-          saveSettingsToStorage();
-        });
-      });
-
-      // TTS Controls
-      DOM.btnTts.addEventListener('click', toggleTtsModal);
-      DOM.btnCloseTts.addEventListener('click', () => DOM.modalTts.classList.add('hidden'));
-      DOM.btnTtsPlay.addEventListener('click', handleTtsPlayPause);
-      DOM.inputTtsRate.addEventListener('input', (e) => {
-        App.tts.rate = parseFloat(e.target.value);
-        DOM.labelTtsRate.textContent = App.tts.rate.toFixed(1);
-      });
-    }
-
-    async function handleFileSelect(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      showLoading(`'${file.name}' 파일을 읽고 파싱하는 중...`);
-
-      try {
-        const ext = file.name.split('.').pop().toLowerCase();
-        let parsedResult = { title: file.name.replace(/\.[^/.]+$/, ""), rawText: "", htmlContent: "", chapters: [] };
-
-        if (ext === 'txt') {
-          const text = await file.text();
-          parsedResult = parseTxtContent(text, parsedResult.title);
-        } else if (ext === 'docx') {
-          parsedResult = await parseDocxContent(file, parsedResult.title);
-        } else if (ext === 'pdf') {
-          parsedResult = await parsePdfContent(file, parsedResult.title);
-        } else if (ext === 'epub') {
-          parsedResult = await parseEpubContent(file, parsedResult.title);
-        } else {
-          throw new Error('지원하지 않는 파일 형식입니다.');
+<body class="h-full theme-light overflow-hidden flex flex-col selection:bg-amber-200">
+
+    <!-- PWA Service Worker 동적 등록 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('activate', e => e.clients.claim());
+                self.addEventListener('fetch', e => {
+                    e.respondWith(
+                        caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('./index.html')))
+                    );
+                });
+            `;
+            const blob = new Blob([swCode], { type: 'text/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
         }
+    </script>
 
-        // Add to book storage
-        const newBook = {
-          id: 'book_' + Date.now(),
-          title: parsedResult.title,
-          fileType: ext.toUpperCase(),
-          htmlContent: parsedResult.htmlContent,
-          chapters: parsedResult.chapters,
-          progress: 0,
-          scrollTop: 0,
-          dateAdded: new Date().toLocaleDateString('ko-KR')
-        };
+    <!-- 숨겨진 파일 인풋 -->
+    <input type="file" id="fileInput" class="hidden" accept=".txt,.docx,.pdf,.epub,.md,.html">
 
-        App.books.unshift(newBook);
-        saveBooksToStorage();
-
-        // Immediately Open Book in Reader
-        openBook(newBook.id);
-
-      } catch (err) {
-        console.error(err);
-        alert('파일을 읽는 중 오류가 발생했습니다: ' + err.message);
-      } finally {
-        hideLoading();
-        DOM.fileInput.value = '';
-      }
-    }
-
-    // Helper: HTML Clean / DOM Structural Extractor into Proper Lines
-    function cleanAndStructureHtml(rawHtml) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(rawHtml, 'text/html');
-
-      const blocks = doc.querySelectorAll('p, div, h1, h2, h3, h4, h5, h6, br, li, blockquote');
-      blocks.forEach(el => {
-        if (el.tagName.toLowerCase() === 'br') {
-          el.replaceWith('\n');
-        } else {
-          el.prepend(doc.createTextNode('\n'));
-          el.append(doc.createTextNode('\n'));
-        }
-      });
-
-      return doc.body.textContent || '';
-    }
-
-    // Helper: Korean Chapter & Header Detection Engine
-    function parseTextIntoStructuredChapters(rawText, title) {
-      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-      const chapterRegex = /^(제\s*\d+\s*[장화부편]|chapter\s*\d+|\d+\s*화|\d+\s*장|#[^\n]+|\d+\.\s+[^\n]+)/i;
-
-      let chapters = [];
-      let currentChapter = { title: "서두 / 시작", lines: [], id: "chap_0" };
-      let formattedHtmlArr = [];
-
-      lines.forEach((line) => {
-        const safeLine = line.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-        if (chapterRegex.test(line) && line.length < 60) {
-          if (currentChapter.lines.length > 0) {
-            chapters.push(currentChapter);
-          }
-          const chapId = `chap_${chapters.length}`;
-          currentChapter = { title: line, lines: [], id: chapId };
-
-          formattedHtmlArr.push(`<h2 id="${chapId}" class="reader-heading text-xl font-bold">${safeLine}</h2>`);
-        } else if (line.startsWith('"') || line.startsWith('“') || line.startsWith("'")) {
-          formattedHtmlArr.push(`<p class="reader-paragraph reader-dialogue">${safeLine}</p>`);
-          currentChapter.lines.push(line);
-        } else {
-          formattedHtmlArr.push(`<p class="reader-paragraph">${safeLine}</p>`);
-          currentChapter.lines.push(line);
-        }
-      });
-
-      if (currentChapter.lines.length > 0) {
-        chapters.push(currentChapter);
-      }
-
-      if (chapters.length === 0) {
-        chapters.push({ title: "전체 본문", lines: lines, id: "chap_0" });
-      }
-
-      return {
-        title,
-        htmlContent: formattedHtmlArr.join('\n'),
-        chapters: chapters.map(c => ({ id: c.id, title: c.title }))
-      };
-    }
-
-    // 1. TXT Parser
-    function parseTxtContent(text, title) {
-      return parseTextIntoStructuredChapters(text, title);
-    }
-
-    // 2. DOCX Parser
-    async function parseDocxContent(file, title) {
-      const arrayBuffer = await file.arrayBuffer();
-      const result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
-      const structuredText = cleanAndStructureHtml(result.value);
-      return parseTextIntoStructuredChapters(structuredText, title);
-    }
-
-    // 3. PDF Parser
-    async function parsePdfContent(file, title) {
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      let fullText = '';
-
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items.map(item => item.str).join(' ');
-        fullText += pageText + '\n\n';
-      }
-
-      return parseTextIntoStructuredChapters(fullText, title);
-    }
-
-    // 4. EPUB Parser
-    async function parseEpubContent(file, title) {
-      const arrayBuffer = await file.arrayBuffer();
-      const book = ePub(arrayBuffer);
-      await book.ready;
-
-      let combinedText = '';
-      const spine = book.spine;
-
-      for (const item of spine.items) {
-        try {
-          const doc = await book.load(item.href);
-          if (doc) {
-            let extracted = '';
-            if (typeof doc === 'string') {
-              extracted = cleanAndStructureHtml(doc);
-            } else if (doc.body) {
-              extracted = cleanAndStructureHtml(doc.body.innerHTML);
-            }
-            combinedText += extracted + '\n\n';
-          }
-        } catch (e) {
-          console.warn('Error loading EPUB chapter segment', e);
-        }
-      }
-
-      return parseTextIntoStructuredChapters(combinedText, title);
-    }
-
-    // -------------------------------------------------------------
-    // LIBRARY VIEW RENDER & MANAGEMENT
-    // -------------------------------------------------------------
-    function renderLibrary() {
-      DOM.libraryGrid.innerHTML = '';
-
-      const filteredBooks = App.books.filter(b => {
-        if (App.activeTab === 'reading') return (b.progress || 0) < 95;
-        return (b.progress || 0) >= 95;
-      });
-
-      if (filteredBooks.length === 0) {
-        DOM.libraryEmpty.classList.remove('hidden');
-        DOM.libraryGrid.classList.add('hidden');
-        return;
-      }
-
-      DOM.libraryEmpty.classList.add('hidden');
-      DOM.libraryGrid.classList.remove('hidden');
-
-      filteredBooks.forEach(book => {
-        const card = document.createElement('div');
-        card.className = "bg-slate-900 border border-slate-800 hover:border-brand-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all hover:shadow-lg hover:shadow-brand-500/10 group cursor-pointer";
-        
-        const progressPercent = Math.min(100, Math.max(0, Math.round(book.progress || 0)));
-
-        card.innerHTML = `
-          <div>
-            <div class="flex items-start justify-between gap-2 mb-2">
-              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-brand-500/20 text-brand-400 border border-brand-500/30">${book.fileType}</span>
-              <button class="btn-delete-book text-slate-500 hover:text-rose-400 p-1 transition-colors" data-id="${book.id}" title="삭제">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-              </button>
+    <!-- 1. 홈 화면 (Home View) -->
+    <div id="view-home" class="flex-1 flex flex-col overflow-y-auto pb-20 pt-safe px-6">
+        <div class="max-w-md mx-auto w-full my-auto py-12 text-center">
+            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-tr from-amber-600 to-amber-400 rounded-3xl shadow-xl flex items-center justify-center text-white text-3xl font-bold tracking-wider">
+                L
             </div>
-            <h3 class="font-bold text-slate-100 group-hover:text-brand-300 transition-colors line-clamp-2 text-base leading-snug mb-1">${book.title}</h3>
-            <p class="text-xs text-slate-500 mb-4">등록일: ${book.dateAdded}</p>
-          </div>
-
-          <div>
-            <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5 font-mono">
-              <span>진도율</span>
-              <span class="font-bold text-brand-400">${progressPercent}%</span>
+            <h1 class="text-3xl font-bold tracking-tight mb-3">LUMINA</h1>
+            <p class="text-sm opacity-70 mb-10 leading-relaxed">
+                모든 서적 파일을 완벽한 가독성과 미니멀한 인터페이스로 경험하세요. 프라이버시가 완벽히 보호되는 로컬 독서 공간입니다.
+            </p>
+            <div class="space-y-3">
+                <button onclick="switchView('library')" class="w-full py-4 bg-amber-700 hover:bg-amber-800 text-white font-medium rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    내 서재로 이동
+                </button>
+                <button onclick="triggerFileOpen()" class="w-full py-4 border border-amber-800/30 hover:bg-amber-900/5 font-medium rounded-2xl transition flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    새 파일 바로 열기
+                </button>
+                <button onclick="openPasteModal()" class="w-full py-3 text-sm opacity-70 hover:opacity-100 transition">
+                    + TXT 텍스트 직접 붙여넣기
+                </button>
             </div>
-            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-              <div class="h-full bg-gradient-to-r from-brand-600 to-indigo-400 rounded-full" style="width: ${progressPercent}%"></div>
+            <div class="mt-12 text-xs opacity-40">
+                Lumina Reader v3.5 • Private Local Storage
             </div>
-          </div>
-        `;
+        </div>
+    </div>
 
-        card.addEventListener('click', (e) => {
-          if (e.target.closest('.btn-delete-book')) return;
-          openBook(book.id);
-        });
+    <!-- 2. 서재 화면 (Library View) -->
+    <div id="view-library" class="flex-1 flex flex-col overflow-hidden hidden">
+        <div class="px-6 py-4 border-b border-black/5 flex items-center justify-between shrink-0">
+            <h2 class="text-xl font-bold">내 서재</h2>
+            <div class="flex items-center gap-2">
+                <button onclick="triggerFileOpen()" class="px-4 py-2 bg-amber-700 text-white text-sm font-medium rounded-xl shadow">파일 추가</button>
+            </div>
+        </div>
+        <!-- 탭 메뉴 -->
+        <div class="flex border-b border-black/5 px-6 shrink-0">
+            <button onclick="switchLibTab('reading')" id="tab-reading" class="py-3 px-4 text-sm font-bold border-b-2 border-amber-700">읽는 중</button>
+            <button onclick="switchLibTab('completed')" id="tab-completed" class="py-3 px-4 text-sm font-medium opacity-60 border-b-2 border-transparent">다 읽은 책</button>
+        </div>
+        <!-- 목록 컨테이너 -->
+        <div id="library-list" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- 동적 렌더링 -->
+        </div>
+    </div>
 
-        const deleteBtn = card.querySelector('.btn-delete-book');
-        deleteBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (confirm(`'${book.title}' 도서를 서재에서 삭제하시겠습니까?`)) {
-            App.books = App.books.filter(b => b.id !== book.id);
-            saveBooksToStorage();
+    <!-- 3. 독서 화면 (Reader View) -->
+    <div id="view-reader" class="flex-1 flex flex-col overflow-hidden hidden relative">
+        <!-- 상단 플로팅 바 (슬림 컴팩트) -->
+        <header id="reader-header" class="absolute top-0 left-0 right-0 z-30 transition-transform duration-300 backdrop-blur-md bg-opacity-90 border-b border-black/5 flex items-center justify-between px-4 h-12">
+            <div class="flex items-center gap-2 overflow-hidden">
+                <button onclick="switchView('library')" class="p-1.5 rounded-lg opacity-70 hover:opacity-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <span id="header-book-title" class="text-sm font-bold truncate max-w-[160px] sm:max-w-xs">책 제목</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <button onclick="toggleTocModal(true)" class="p-2 rounded-lg opacity-70 hover:opacity-100" title="목차">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                </button>
+                <button onclick="toggleSettingsModal(true)" class="p-2 rounded-lg opacity-70 hover:opacity-100" title="글꼴/서식">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                </button>
+                <button onclick="toggleTtsPlayer()" id="tts-btn" class="p-2 rounded-lg opacity-70 hover:opacity-100" title="음성 듣기">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.703L5.586 15z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- 본문 스크롤 영역 (전체화면 밀착) -->
+        <div id="reader-scroll-container" class="flex-1 overflow-y-auto px-6 pt-16 pb-24 outline-none" tabindex="0">
+            <div id="reader-content" class="max-w-2xl mx-auto space-y-6 text-justify leading-relaxed">
+                <!-- 독서 텍스트 출력 영역 -->
+            </div>
+        </div>
+
+        <!-- 하단 진도율 프로그레스 바 및 네비게이션 -->
+        <div id="reader-footer" class="absolute bottom-0 left-0 right-0 z-30 transition-transform duration-300 backdrop-blur-md bg-opacity-90 border-t border-black/5 px-6 py-2 flex items-center justify-between text-xs opacity-70">
+            <span id="reading-progress-text">진도율 0%</span>
+            <span id="reading-current-chapter">시작 부분</span>
+        </div>
+    </div>
+
+    <!-- 하단 고정 네비게이션 바 (홈, 서재, 리더 전환) -->
+    <nav class="h-14 border-t border-black/10 flex items-center justify-around shrink-0 z-40 bg-inherit pb-safe">
+        <button onclick="switchView('home')" class="flex flex-col items-center justify-center flex-1 h-full opacity-70 hover:opacity-100" id="nav-btn-home">
+            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span class="text-[10px]">홈</span>
+        </button>
+        <button onclick="switchView('library')" class="flex flex-col items-center justify-center flex-1 h-full opacity-70 hover:opacity-100" id="nav-btn-library">
+            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <span class="text-[10px]">서재</span>
+        </button>
+        <button onclick="switchView('reader')" class="flex flex-col items-center justify-center flex-1 h-full opacity-70 hover:opacity-100" id="nav-btn-reader">
+            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <span class="text-[10px]">리더</span>
+        </button>
+    </nav>
+
+    <!-- 목차 모달 -->
+    <div id="toc-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="w-full sm:max-w-md max-h-[80vh] bg-inherit border border-black/10 rounded-t-3xl sm:rounded-3xl flex flex-col overflow-hidden shadow-2xl">
+            <div class="px-6 py-4 border-b border-black/10 flex items-center justify-between">
+                <h3 class="font-bold text-lg">목차</h3>
+                <button onclick="toggleTocModal(false)" class="p-1 opacity-70 hover:opacity-100">✕</button>
+            </div>
+            <div id="toc-list" class="flex-1 overflow-y-auto p-4 space-y-2">
+                <!-- 목차 목록 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 설정 모달 (글꼴, 크기, 테마) -->
+    <div id="settings-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="w-full sm:max-w-md bg-inherit border border-black/10 rounded-t-3xl sm:rounded-3xl flex flex-col overflow-hidden shadow-2xl p-6 space-y-6">
+            <div class="flex items-center justify-between border-b border-black/10 pb-4">
+                <h3 class="font-bold text-lg">독서 설정</h3>
+                <button onclick="toggleSettingsModal(false)" class="p-1 opacity-70 hover:opacity-100">✕</button>
+            </div>
+            <!-- 테마 선택 -->
+            <div>
+                <label class="text-xs font-bold opacity-60 uppercase tracking-wider mb-2 block">화면 테마</label>
+                <div class="grid grid-cols-4 gap-2">
+                    <button onclick="setTheme('light')" class="py-2.5 rounded-xl border border-amber-800/20 bg-[#faf7f2] text-[#2b2b2b] text-xs font-medium">따뜻한빛</button>
+                    <button onclick="setTheme('sepia')" class="py-2.5 rounded-xl border border-amber-800/20 bg-[#f4ecd8] text-[#5c4033] text-xs font-medium">세피아</button>
+                    <button onclick="setTheme('dark')" class="py-2.5 rounded-xl border border-black/20 bg-[#1a1a1a] text-[#e0e0e0] text-xs font-medium">다크</button>
+                    <button onclick="setTheme('oled')" class="py-2.5 rounded-xl border border-white/20 bg-[#000000] text-[#f1f5f9] text-xs font-medium">OLED</button>
+                </div>
+            </div>
+            <!-- 글꼴 선택 -->
+            <div>
+                <label class="text-xs font-bold opacity-60 uppercase tracking-wider mb-2 block">글꼴 선택</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="setFontFamily('Nanum Myeongjo')" class="py-2 rounded-xl border border-black/10 text-xs font-serif">나눔명조</button>
+                    <button onclick="setFontFamily('Gowun Batang')" class="py-2 rounded-xl border border-black/10 text-xs font-serif">고운바탕</button>
+                    <button onclick="setFontFamily('Apple SD Gothic Neo')" class="py-2 rounded-xl border border-black/10 text-xs font-sans">산스(고딕)</button>
+                </div>
+            </div>
+            <!-- 글자 크기 조절 -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-xs font-bold opacity-60 uppercase tracking-wider">글자 크기</label>
+                    <span id="font-size-val" class="text-xs font-bold">18px</span>
+                </div>
+                <input type="range" min="14" max="28" value="18" oninput="setFontSize(this.value)" class="w-full accent-amber-700">
+            </div>
+        </div>
+    </div>
+
+    <!-- 직접 텍스트 붙여넣기 모달 -->
+    <div id="paste-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="w-full sm:max-w-lg bg-inherit border border-black/10 rounded-3xl flex flex-col overflow-hidden shadow-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-black/10 pb-3">
+                <h3 class="font-bold text-lg">TXT 텍스트 붙여넣기</h3>
+                <button onclick="closePasteModal()" class="p-1 opacity-70 hover:opacity-100">✕</button>
+            </div>
+            <input type="text" id="paste-title-input" placeholder="책 제목을 입력하세요" class="w-full px-4 py-3 rounded-xl border border-black/10 bg-transparent text-sm outline-none">
+            <textarea id="paste-content-input" placeholder="여기에 텍스트를 붙여넣으세요..." class="w-full h-48 px-4 py-3 rounded-xl border border-black/10 bg-transparent text-sm outline-none resize-none"></textarea>
+            <button onclick="savePastedText()" class="w-full py-3 bg-amber-700 text-white font-medium rounded-xl">서재에 추가하고 읽기</button>
+        </div>
+    </div>
+
+    <!-- 핵심 자바스크립트 로직 -->
+    <script>
+        let currentView = 'home';
+        let library = JSON.parse(localStorage.getItem('lumina_library') || '[]');
+        let currentBookId = null;
+        let activeBook = null;
+        let currentTheme = localStorage.getItem('lumina_theme') || 'light';
+        let currentFont = localStorage.getItem('lumina_font') || 'Nanum Myeongjo';
+        let currentSize = localStorage.getItem('lumina_size') || '18';
+
+        // 초기화 실행
+        window.addEventListener('DOMContentLoaded', () => {
+            setTheme(currentTheme);
+            setFontFamily(currentFont);
+            setFontSize(currentSize);
             renderLibrary();
-          }
+            
+            // 파일 업로드 이벤트 연결
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+            // 스크롤 이벤트 (진도율 및 자동 저장)
+            const scrollContainer = document.getElementById('reader-scroll-container');
+            scrollContainer.addEventListener('scroll', () => {
+                if (!currentBookId) return;
+                const scrollTop = scrollContainer.scrollTop;
+                const scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+                if (scrollHeight <= 0) return;
+                const progress = Math.min(100, Math.max(0, Math.round((scrollTop / scrollHeight) * 100)));
+                
+                document.getElementById('reading-progress-text').innerText = `진도율 ${progress}%`;
+                
+                // 로컬 스토리지에 진행도 저장
+                const book = library.find(b => b.id === currentBookId);
+                if (book) {
+                    book.progress = progress;
+                    book.scrollTop = scrollTop;
+                    if (progress >= 95) book.completed = true;
+                    localStorage.setItem('lumina_library', JSON.stringify(library));
+                }
+            });
         });
 
-        DOM.libraryGrid.appendChild(card);
-      });
+        // 화면 전환 함수
+        function switchView(viewName) {
+            currentView = viewName;
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-library').classList.add('hidden');
+            document.getElementById('view-reader').classList.add('hidden');
 
-      lucide.createIcons();
-    }
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
 
-    // -------------------------------------------------------------
-    // READER ENGINE & PROGRESS CALCULATION
-    // -------------------------------------------------------------
-    function openBook(bookId) {
-      const book = App.books.find(b => b.id === bookId);
-      if (!book) return;
+            // 하단 네비게이션 활성화 표시
+            ['home', 'library', 'reader'].forEach(v => {
+                const btn = document.getElementById(`nav-btn-${v}`);
+                if (btn) btn.style.opacity = (v === viewName) ? '1' : '0.6';
+            });
 
-      App.currentBookId = bookId;
+            if (viewName === 'library') renderLibrary();
+        }
 
-      // Inject Content
-      DOM.contentWrapper.innerHTML = book.htmlContent || '<p class="text-slate-500">본문 내용이 없습니다.</p>';
+        // 탭 전환 (읽는 중 / 다 읽은 책)
+        let activeLibTab = 'reading';
+        function switchLibTab(tab) {
+            activeLibTab = tab;
+            document.getElementById('tab-reading').className = tab === 'reading' ? 'py-3 px-4 text-sm font-bold border-b-2 border-amber-700' : 'py-3 px-4 text-sm font-medium opacity-60 border-b-2 border-transparent';
+            document.getElementById('tab-completed').className = tab === 'completed' ? 'py-3 px-4 text-sm font-bold border-b-2 border-amber-700' : 'py-3 px-4 text-sm font-medium opacity-60 border-b-2 border-transparent';
+            renderLibrary();
+        }
 
-      // Populate TOC List
-      renderTocList(book.chapters || []);
+        // 서재 목록 렌더링
+        function renderLibrary() {
+            const listEl = document.getElementById('library-list');
+            listEl.innerHTML = '';
+            
+            const filtered = library.filter(b => activeLibTab === 'completed' ? b.completed : !b.completed);
 
-      // Switch to Reader View
-      switchView('reader');
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<div class="text-center py-12 opacity-50 text-sm">저장된 도서가 없습니다. 파일을 추가해보세요.</div>`;
+                return;
+            }
 
-      // Restore Scroll Position
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          if (book.scrollTop && book.scrollTop > 0) {
-            DOM.scrollContainer.scrollTop = book.scrollTop;
-          } else {
-            DOM.scrollContainer.scrollTop = 0;
-          }
-          updateReadingProgress();
-        }, 50);
-      });
-    }
+            filtered.forEach(book => {
+                const item = document.createElement('div');
+                item.className = 'p-4 rounded-2xl border border-black/10 flex items-center justify-between gap-4 bg-inherit hover:border-amber-700/50 transition cursor-pointer';
+                item.onclick = () => openBook(book.id);
+                item.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-sm truncate line-clamp-2">${escapeHtml(book.title)}</h4>
+                        <div class="flex items-center gap-3 mt-2 text-xs opacity-60">
+                            <span>진도율 ${book.progress || 0}%</span>
+                            <span>•</span>
+                            <span>${new Date(book.date).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    <button onclick="event.stopPropagation(); deleteBook('${book.id}')" class="p-2 opacity-50 hover:opacity-100 text-red-500" title="삭제">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                `;
+                listEl.appendChild(item);
+            });
+        }
 
-    function renderTocList(chapters) {
-      DOM.tocListContainer.innerHTML = '';
+        // 파일 선택 트리거
+        function triggerFileOpen() {
+            document.getElementById('fileInput').click();
+        }
 
-      if (!chapters || chapters.length === 0) {
-        DOM.tocListContainer.innerHTML = '<p class="text-xs text-slate-500 py-4 text-center">감지된 목차가 없습니다.</p>';
-        return;
-      }
+        // 파일 파싱 메인 핸들러
+        async function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const ext = file.name.split('.').pop().toLowerCase();
+            const title = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
 
-      chapters.forEach((chap) => {
-        const item = document.createElement('button');
-        item.className = "w-full text-left py-2 px-3 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors text-xs truncate border-b border-slate-800/50";
-        item.textContent = chap.title;
+            let content = '';
+            let chapters = [];
 
-        item.addEventListener('click', () => {
-          const targetEl = document.getElementById(chap.id);
-          if (targetEl) {
-            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            DOM.modalToc.classList.add('hidden');
-          }
-        });
+            try {
+                if (ext === 'txt') {
+                    content = await readTextFile(file);
+                    chapters = parseChapters(content);
+                } else if (ext === 'docx') {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const result = await mammoth.convertToHtml({ arrayBuffer });
+                    content = htmlToCleanParagraphs(result.value);
+                    chapters = parseChapters(content);
+                } else if (ext === 'pdf') {
+                    content = await parsePdfFile(file);
+                    chapters = parseChapters(content);
+                } else if (ext === 'epub') {
+                    content = await parseEpubFile(file);
+                    chapters = parseChapters(content);
+                } else if (ext === 'md' || ext === 'html') {
+                    const raw = await readTextFile(file);
+                    content = ext === 'md' ? marked.parse(raw) : htmlToCleanParagraphs(raw);
+                    chapters = parseChapters(content);
+                }
 
-        DOM.tocListContainer.appendChild(item);
-      });
-    }
+                const bookObj = {
+                    id: 'book_' + Date.now(),
+                    title: title,
+                    content: content,
+                    chapters: chapters,
+                    progress: 0,
+                    scrollTop: 0,
+                    completed: false,
+                    date: Date.now()
+                };
 
-    function updateReadingProgress() {
-      if (!App.currentBookId) return;
+                library.unshift(bookObj);
+                localStorage.setItem('lumina_library', JSON.stringify(library));
+                openBook(bookObj.id);
+            } catch (err) {
+                alert('파일을 읽는 중 오류가 발생했습니다: ' + err.message);
+            } finally {
+                e.target.value = '';
+            }
+        }
 
-      const container = DOM.scrollContainer;
-      const scrollTop = container.scrollTop;
-      const scrollHeight = container.scrollHeight - container.clientHeight;
+        // 텍스트 파일 인코딩 자동 감지 및 읽기 (UTF-8, CP949, ANSI)
+        async function readTextFile(file) {
+            const buffer = await file.arrayBuffer();
+            try {
+                const decoder = new TextDecoder('utf-8', { fatal: true });
+                return decoder.decode(buffer);
+            } catch {
+                try {
+                    const decoder = new TextDecoder('euc-kr');
+                    return decoder.decode(buffer);
+                } catch {
+                    const decoder = new TextDecoder('ansi');
+                    return decoder.decode(buffer);
+                }
+            }
+        }
 
-      let progress = 0;
-      if (scrollHeight > 0) {
-        progress = (scrollTop / scrollHeight) * 100;
-      }
+        // PDF 파일 지능형 좌표 파싱 (한 줄 뭉개짐 방지)
+        async function parsePdfFile(file) {
+            const typedarray = new Uint8Array(await file.arrayBuffer());
+            const pdf = await pdfjsLib.getDocument(typedarray).promise;
+            let fullText = '';
 
-      progress = Math.min(100, Math.max(0, progress));
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                let lastY = null;
+                let pageText = '';
 
-      // Update Visual Progress Fill
-      DOM.progressFill.style.width = `${progress}%`;
+                textContent.items.forEach(item => {
+                    const y = Math.round(item.transform[5]);
+                    if (lastY !== null && Math.abs(lastY - y) > 8) {
+                        pageText += '\n';
+                    }
+                    pageText += item.str + ' ';
+                    lastY = y;
+                });
+                fullText += pageText + '\n\n';
+            }
+            return htmlToCleanParagraphs(fullText);
+        }
 
-      // Sync with Book State in Array
-      const book = App.books.find(b => b.id === App.currentBookId);
-      if (book) {
-        book.progress = progress;
-        book.scrollTop = scrollTop;
-        saveBooksToStorage();
-      }
-    }
+        // EPUB 파서
+        async function parseEpubFile(file) {
+            const book = ePub(await file.arrayBuffer());
+            await book.ready;
+            let fullText = '';
+            for (const spineItem of book.spine) {
+                const item = book.navigation.get(spineItem.href) || spineItem;
+                try {
+                    const doc = await book.load(spineItem.href);
+                    if (doc && doc.body) {
+                        fullText += doc.body.innerHTML + '\n\n';
+                    }
+                } catch (e) {}
+            }
+            return htmlToCleanParagraphs(fullText);
+        }
 
-    // -------------------------------------------------------------
-    // DISPLAY & TYPOGRAPHY SETTINGS APPLIER
-    // -------------------------------------------------------------
-    function applyReaderSettings() {
-      const s = App.readerSettings;
-      const wrapper = DOM.contentWrapper;
-      const container = DOM.scrollContainer;
+        // HTML 태그 정제 및 블록별 줄바꿈 생성
+        function htmlToCleanParagraphs(htmlStr) {
+            const div = document.createElement('div');
+            div.innerHTML = htmlStr;
+            const blocks = div.querySelectorAll('p, h1, h2, h3, h4, h5, h6, div, br, li');
+            if (blocks.length === 0) return div.textContent;
 
-      // Font Size
-      wrapper.style.fontSize = `${s.fontSize}px`;
-      DOM.inputFontSize.value = s.fontSize;
-      DOM.labelFontSize.textContent = `${s.fontSize}px`;
+            let result = '';
+            blocks.forEach(el => {
+                const text = el.textContent.trim();
+                if (text) {
+                    result += text + '\n\n';
+                }
+            });
+            return result || div.textContent;
+        }
 
-      // Line Height & Letter Spacing
-      wrapper.style.lineHeight = s.lineHeight;
-      DOM.selectLineHeight.value = s.lineHeight;
+        // 목차 파서 및 챕터 감지 (한글 소설/문서 로직 완벽 반영)
+        function parseChapters(text) {
+            const lines = text.split('\n');
+            const chapters = [];
+            const regex = /^(제\s*\d+\s*[장부화편]|[0-9]+\.\s+|Chapter\s+\d+|[0-9]+화)/i;
 
-      wrapper.style.letterSpacing = s.letterSpacing;
-      DOM.selectLetterSpacing.value = s.letterSpacing;
+            lines.forEach((line, idx) => {
+                const trimmed = line.trim();
+                if (trimmed.length > 0 && trimmed.length < 50 && regex.test(trimmed)) {
+                    chapters.push({ title: trimmed, lineIndex: idx });
+                }
+            });
 
-      // Font Family
-      wrapper.classList.remove('font-myeongjo', 'font-batang', 'font-serifkr');
-      wrapper.classList.add(s.fontFamily);
+            // 목차가 없을 경우 임의 목차 생성 (500라인 단위)
+            if (chapters.length === 0) {
+                for (let i = 0; i < lines.length; i += 500) {
+                    chapters.push({ title: `파트 ${Math.floor(i/500) + 1}`, lineIndex: i });
+                }
+            }
+            return chapters;
+        }
 
-      // Theme Colors
-      container.classList.remove('reader-theme-dark', 'reader-theme-light', 'reader-theme-sepia', 'reader-theme-black');
-      container.classList.add(`reader-theme-${s.theme}`);
-    }
+        // 책 열기
+        function openBook(id) {
+            const book = library.find(b => b.id === id);
+            if (!book) return;
+            currentBookId = id;
+            activeBook = book;
 
-    // -------------------------------------------------------------
-    // NATIVE TTS SYSTEM CONTROLLER
-    // -------------------------------------------------------------
-    function toggleTtsModal() {
-      if (DOM.modalTts.classList.contains('hidden')) {
-        DOM.modalTts.classList.remove('hidden');
-      } else {
-        DOM.modalTts.classList.add('hidden');
-        stopTts();
-      }
-    }
+            document.getElementById('header-book-title').innerText = book.title;
+            renderReaderContent(book);
+            switchView('reader');
 
-    function handleTtsPlayPause() {
-      if (App.tts.isPlaying) {
-        stopTts();
-      } else {
-        startTts();
-      }
-    }
+            // 이전 스크롤 위치 복원
+            setTimeout(() => {
+                const sc = document.getElementById('reader-scroll-container');
+                if (sc && book.scrollTop) {
+                    sc.scrollTop = book.scrollTop;
+                }
+            }, 50);
+        }
 
-    function startTts() {
-      if (!App.tts.synth) {
-        alert('이 브라우저는 음성 읽기(TTS)를 지원하지 않습니다.');
-        return;
-      }
+        // 본문 렌더링 (대사 인용구 서식, 현대적 밀레니엄 스타일)
+        function renderReaderContent(book) {
+            const contentEl = document.getElementById('reader-content');
+            contentEl.innerHTML = '';
 
-      App.tts.synth.cancel();
+            const lines = book.content.split('\n');
+            let htmlOutput = '';
 
-      const textToRead = DOM.contentWrapper.innerText;
-      if (!textToRead || textToRead.trim().length === 0) {
-        alert('읽을 본문이 없습니다.');
-        return;
-      }
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed) return;
 
-      const utterance = new SpeechSynthesisUtterance(textToRead.slice(0, 3000));
-      utterance.lang = 'ko-KR';
-      utterance.rate = App.tts.rate;
+                // 제목 감지
+                if (/^(제\s*\d+\s*[장부화편]|[0-9]+\.\s+|Chapter\s+\d+|[0-9]+화)/i.test(trimmed)) {
+                    htmlOutput += `<h2 class="text-xl font-bold mt-8 mb-4 border-b border-black/10 pb-2">${escapeHtml(trimmed)}</h2>`;
+                } 
+                // 대사 감지 ("...", 「...」, “...”)
+                else if (/^["“「｢].*["”」｣]$/.test(trimmed) || trimmed.startsWith('"') || trimmed.startsWith('“') || trimmed.startsWith('「')) {
+                    htmlOutput += `<blockquote class="pl-4 border-l-2 border-amber-600/50 my-3 opacity-90 italic">${escapeHtml(trimmed)}</blockquote>`;
+                } 
+                // 일반 본문
+                else {
+                    htmlOutput += `<p class="mb-4 leading-relaxed">${escapeHtml(trimmed)}</p>`;
+                }
+            });
 
-      utterance.onstart = () => {
-        App.tts.isPlaying = true;
-        DOM.ttsStatus.textContent = '음성 읽는 중...';
-        DOM.btnTtsPlay.innerHTML = '<i data-lucide="pause" class="w-5 h-5 fill-current"></i>';
-        lucide.createIcons();
-      };
+            contentEl.innerHTML = htmlOutput;
+        }
 
-      utterance.onend = () => {
-        stopTts();
-      };
+        // 도서 삭제
+        function deleteBook(id) {
+            library = library.filter(b => b.id !== id);
+            localStorage.setItem('lumina_library', JSON.stringify(library));
+            renderLibrary();
+        }
 
-      utterance.onerror = () => {
-        stopTts();
-      };
+        // 직접 붙여넣기 저장
+        function savePastedText() {
+            const title = document.getElementById('paste-title-input').value.trim() || '제목 없는 텍스트';
+            const content = document.getElementById('paste-content-input').value.trim();
+            if (!content) {
+                alert('내용을 입력해주세요.');
+                return;
+            }
 
-      App.tts.utterance = utterance;
-      App.tts.synth.speak(utterance);
-    }
+            const bookObj = {
+                id: 'book_' + Date.now(),
+                title: title,
+                content: htmlToCleanParagraphs(content),
+                chapters: parseChapters(content),
+                progress: 0,
+                scrollTop: 0,
+                completed: false,
+                date: Date.now()
+            };
 
-    function stopTts() {
-      if (App.tts.synth) App.tts.synth.cancel();
-      App.tts.isPlaying = false;
-      DOM.ttsStatus.textContent = '음성 읽기 정지됨';
-      DOM.btnTtsPlay.innerHTML = '<i data-lucide="play" class="w-5 h-5 fill-current"></i>';
-      lucide.createIcons();
-    }
+            library.unshift(bookObj);
+            localStorage.setItem('lumina_library', JSON.stringify(library));
+            closePasteModal();
+            openBook(bookObj.id);
+        }
 
-    // Loader Utilities
-    function showLoading(msg) {
-      DOM.loadingText.textContent = msg || '처리 중...';
-      DOM.loadingOverlay.classList.remove('hidden');
-    }
+        // 모달 제어 함수들
+        function openPasteModal() { document.getElementById('paste-modal').classList.remove('hidden'); }
+        function closePasteModal() { document.getElementById('paste-modal').classList.add('hidden'); }
+        function toggleTocModal(show) {
+            const modal = document.getElementById('toc-modal');
+            if (show) {
+                renderTocList();
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+        function toggleSettingsModal(show) {
+            document.getElementById('settings-modal').classList.toggle('hidden', !show);
+        }
 
-    function hideLoading() {
-      DOM.loadingOverlay.classList.add('hidden');
-    }
-  </script>
+        // 목차 리스트 렌더링
+        function renderTocList() {
+            const tocEl = document.getElementById('toc-list');
+            tocEl.innerHTML = '';
+            if (!activeBook || !activeBook.chapters || activeBook.chapters.length === 0) {
+                tocEl.innerHTML = `<div class="p-4 text-center opacity-50 text-sm">목차가 없습니다.</div>`;
+                return;
+            }
+
+            activeBook.chapters.forEach(ch => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3 rounded-xl hover:bg-black/5 text-sm font-medium transition truncate';
+                btn.innerText = ch.title;
+                btn.onclick = () => {
+                    toggleTocModal(false);
+                    // 해당 위치로 스크롤 이동 로직
+                    const sc = document.getElementById('reader-scroll-container');
+                    sc.scrollTop = ch.lineIndex * 30; // 대략적인 위치 스크롤
+                };
+                tocEl.appendChild(btn);
+            });
+        }
+
+        // 설정 변경 함수들 (즉시 반영)
+        function setTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('lumina_theme', theme);
+            document.body.className = `h-full theme-${theme} overflow-hidden flex flex-col selection:bg-amber-200`;
+        }
+
+        function setFontFamily(font) {
+            currentFont = font;
+            localStorage.setItem('lumina_font', font);
+            document.body.style.fontFamily = font;
+        }
+
+        function setFontSize(size) {
+            currentSize = size;
+            localStorage.setItem('lumina_size', size);
+            document.getElementById('font-size-val').innerText = size + 'px';
+            document.getElementById('reader-content').style.fontSize = size + 'px';
+        }
+
+        // 시스템 TTS 기능
+        let isSpeaking = false;
+        function toggleTtsPlayer() {
+            if (!('speechSynthesis' in window)) {
+                alert('이 브라우저는 음성 읽기(TTS)를 지원하지 않습니다.');
+                return;
+            }
+            if (isSpeaking) {
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                document.getElementById('tts-btn').classList.remove('text-amber-600');
+            } else {
+                const text = document.getElementById('reader-content').innerText;
+                if (!text) return;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ko-KR';
+                utterance.rate = 1.0;
+                utterance.onend = () => { isSpeaking = false; document.getElementById('tts-btn').classList.remove('text-amber-600'); };
+                window.speechSynthesis.speak(utterance);
+                isSpeaking = true;
+                document.getElementById('tts-btn').classList.add('text-amber-600');
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
 </body>
 </html>
