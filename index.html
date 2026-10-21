@@ -57,23 +57,31 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 
   <style>
-    /* Safe Area & dvh Adjustments for iOS PWA */
+    /* Safe Area & iOS Dynamic Height Adjustments */
     html, body {
       height: 100%;
       height: 100dvh;
-      background-color: #030712; /* Slate-950 background to stop white glitches */
+      background-color: #030712;
       color: #f3f4f6;
-      overflow: hidden;
-      touch-action: manipulation;
+      margin: 0;
+      padding: 0;
       -webkit-tap-highlight-color: transparent;
     }
 
     .pb-safe {
-      padding-bottom: env(safe-area-inset-bottom, 16px);
+      padding-bottom: max(env(safe-area-inset-bottom, 16px), 12px);
     }
     
     .pt-safe {
-      padding-top: env(safe-area-inset-top, 16px);
+      padding-top: max(env(safe-area-inset-top, 16px), 12px);
+    }
+
+    /* iOS Native Smooth Scroll Enforcer */
+    .scrollable-y {
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-y !important;
+      overscroll-behavior-y: contain;
     }
 
     /* Reading Typography Custom Themes */
@@ -96,7 +104,7 @@
 
     /* Custom Scrollbar for Smooth Reading */
     ::-webkit-scrollbar {
-      width: 5px;
+      width: 6px;
     }
     ::-webkit-scrollbar-track {
       background: transparent;
@@ -138,13 +146,13 @@
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white h-dvh flex flex-col">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white h-dvh flex flex-col overflow-hidden">
 
   <!-- APP ROOT CONTAINER -->
   <div id="app" class="relative w-full h-dvh flex flex-col overflow-hidden bg-slate-950">
 
-    <!-- TOP HEADER NAVBAR (Auto Hidden in Immersion Reading) -->
-    <header id="top-nav" class="shrink-0 z-30 transition-transform duration-300 transform translate-y-0 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 pt-safe">
+    <!-- TOP HEADER NAVBAR -->
+    <header id="top-nav" class="shrink-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 pt-safe">
       <div class="flex items-center justify-between px-4 h-14 max-w-5xl mx-auto">
         <div class="flex items-center gap-2 cursor-pointer" id="btn-brand-home">
           <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-brand-500/30">
@@ -176,11 +184,11 @@
     <input type="file" id="file-input" accept=".txt,.epub,.pdf,.docx" class="hidden" />
 
     <!-- MAIN CONTENT VIEW AREA -->
-    <main class="flex-1 relative w-full overflow-hidden bg-slate-950 flex flex-col">
+    <main class="flex-1 relative w-full h-full min-h-0 overflow-hidden bg-slate-950 flex flex-col">
       
       <!-- VIEW 1: HOME / WELCOME DASHBOARD -->
-      <section id="view-home" class="w-full h-full flex flex-col items-center justify-center px-6 text-center overflow-y-auto py-10">
-        <div class="max-w-md mx-auto flex flex-col items-center">
+      <section id="view-home" class="w-full h-full scrollable-y flex flex-col items-center justify-center px-6 text-center py-10">
+        <div class="max-w-md mx-auto flex flex-col items-center my-auto">
           <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white font-black text-4xl shadow-2xl shadow-brand-500/30 mb-6 animate-pulse">
             L
           </div>
@@ -201,7 +209,7 @@
           </div>
 
           <div class="mt-8 text-xs text-slate-500 font-mono">
-            Lumina Reader v2.6 • Private Local Storage
+            Lumina Reader v2.7 • Private Local Storage
           </div>
         </div>
       </section>
@@ -220,7 +228,7 @@
         </div>
 
         <!-- Book List Container -->
-        <div id="library-book-grid" class="flex-1 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pr-1">
+        <div id="library-book-grid" class="flex-1 scrollable-y grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pr-1 pb-6">
           <!-- Dynamic Book Cards Injected Here -->
         </div>
 
@@ -236,8 +244,8 @@
       <section id="view-reader" class="hidden w-full h-full flex-col relative overflow-hidden bg-slate-900 reader-theme-dark">
         
         <!-- Reader Scroll Engine Window -->
-        <div id="reader-scroll-container" class="flex-1 overflow-y-auto px-4 sm:px-8 py-8 transition-colors duration-200">
-          <div id="reader-content-wrapper" class="max-w-2xl mx-auto leading-relaxed transition-all duration-200 min-h-full">
+        <div id="reader-scroll-container" class="flex-1 w-full h-full scrollable-y px-4 sm:px-8 py-8 transition-colors duration-200">
+          <div id="reader-content-wrapper" class="max-w-2xl mx-auto leading-relaxed transition-all duration-200 pb-20">
             <!-- Book HTML Content Rendered Here -->
           </div>
         </div>
@@ -252,7 +260,7 @@
     </main>
 
     <!-- BOTTOM FLOATING FOOTER NAV -->
-    <footer id="bottom-nav" class="shrink-0 z-30 transition-transform duration-300 transform translate-y-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/80 pb-safe">
+    <footer id="bottom-nav" class="shrink-0 z-30 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/80 pb-safe">
       <div class="flex items-center justify-around h-14 max-w-md mx-auto px-2">
         <button id="nav-btn-home" class="flex flex-col items-center justify-center w-16 h-full text-brand-400 transition-colors">
           <i data-lucide="home" class="w-5 h-5"></i>
@@ -280,7 +288,7 @@
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
         </div>
-        <div id="toc-list-container" class="flex-1 overflow-y-auto space-y-1 pr-1 text-sm">
+        <div id="toc-list-container" class="flex-1 scrollable-y space-y-1 pr-1 text-sm">
           <!-- Dynamic Chapter Anchors -->
         </div>
       </div>
@@ -288,7 +296,7 @@
 
     <!-- MODAL 2: READER DISPLAY SETTINGS -->
     <div id="modal-settings" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="w-full sm:max-w-md bg-slate-900 border-t sm:border border-slate-800 rounded-t-2xl sm:rounded-2xl p-5 shadow-2xl space-y-5 pb-safe">
+      <div class="w-full sm:max-w-md bg-slate-900 border-t sm:border border-slate-800 rounded-t-2xl sm:rounded-2xl p-5 shadow-2xl space-y-5 pb-safe max-h-[90dvh] scrollable-y">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <h3 class="font-bold text-white flex items-center gap-2">
             <i data-lucide="sliders" class="w-4 h-4 text-brand-500"></i> 독서 환경 설정
@@ -511,12 +519,17 @@
     }
 
     // -------------------------------------------------------------
-    // NAVIGATION & VIEW SWITCHING
+    // NAVIGATION & VIEW SWITCHING (RELIABLE SCROLL-SAFE TRANSITIONS)
     // -------------------------------------------------------------
     function switchView(viewName) {
       DOM.viewHome.classList.add('hidden');
+      DOM.viewHome.classList.remove('flex');
+
       DOM.viewLibrary.classList.add('hidden');
+      DOM.viewLibrary.classList.remove('flex');
+
       DOM.viewReader.classList.add('hidden');
+      DOM.viewReader.classList.remove('flex');
 
       DOM.btnToc.classList.add('hidden');
       DOM.btnReaderStyle.classList.add('hidden');
@@ -530,13 +543,16 @@
 
       if (viewName === 'home') {
         DOM.viewHome.classList.remove('hidden');
+        DOM.viewHome.classList.add('flex');
         DOM.navHome.classList.add('text-brand-400');
       } else if (viewName === 'library') {
         DOM.viewLibrary.classList.remove('hidden');
+        DOM.viewLibrary.classList.add('flex');
         DOM.navLibrary.classList.add('text-brand-400');
         renderLibrary();
       } else if (viewName === 'reader') {
         DOM.viewReader.classList.remove('hidden');
+        DOM.viewReader.classList.add('flex');
         DOM.navReader.classList.add('text-brand-400');
 
         DOM.btnToc.classList.remove('hidden');
@@ -546,7 +562,7 @@
     }
 
     // -------------------------------------------------------------
-    // FILE PARSER ENGINE (FIXES RAW TAGS & SINGLE LINE COLLAPSE)
+    // FILE PARSER ENGINE
     // -------------------------------------------------------------
     function bindEvents() {
       DOM.btnFileImport.addEventListener('click', () => DOM.fileInput.click());
@@ -577,7 +593,7 @@
       });
 
       // Reader Scroll & Progress Calculation
-      DOM.scrollContainer.addEventListener('scroll', updateReadingProgress);
+      DOM.scrollContainer.addEventListener('scroll', updateReadingProgress, { passive: true });
 
       // Reader Controls
       DOM.btnToc.addEventListener('click', () => DOM.modalToc.classList.remove('hidden'));
@@ -697,7 +713,6 @@
       const parser = new DOMParser();
       const doc = parser.parseFromString(rawHtml, 'text/html');
 
-      // Replace block tags with newline markers
       const blocks = doc.querySelectorAll('p, div, h1, h2, h3, h4, h5, h6, br, li, blockquote');
       blocks.forEach(el => {
         if (el.tagName.toLowerCase() === 'br') {
@@ -708,15 +723,12 @@
         }
       });
 
-      const extractedText = doc.body.textContent || '';
-      return extractedText;
+      return doc.body.textContent || '';
     }
 
     // Helper: Korean Chapter & Header Detection Engine
     function parseTextIntoStructuredChapters(rawText, title) {
-      // Split lines cleanly by double or single break
       const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-      
       const chapterRegex = /^(제\s*\d+\s*[장화부편]|chapter\s*\d+|\d+\s*화|\d+\s*장|#[^\n]+|\d+\.\s+[^\n]+)/i;
 
       let chapters = [];
@@ -724,7 +736,6 @@
       let formattedHtmlArr = [];
 
       lines.forEach((line) => {
-        // Safe HTML Encoding to prevent XSS while maintaining clean text
         const safeLine = line.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
         if (chapterRegex.test(line) && line.length < 60) {
@@ -736,7 +747,6 @@
 
           formattedHtmlArr.push(`<h2 id="${chapId}" class="reader-heading text-xl font-bold">${safeLine}</h2>`);
         } else if (line.startsWith('"') || line.startsWith('“') || line.startsWith("'")) {
-          // Dialogue block styling
           formattedHtmlArr.push(`<p class="reader-paragraph reader-dialogue">${safeLine}</p>`);
           currentChapter.lines.push(line);
         } else {
@@ -908,12 +918,14 @@
 
       // Restore Scroll Position
       requestAnimationFrame(() => {
-        if (book.scrollTop && book.scrollTop > 0) {
-          DOM.scrollContainer.scrollTop = book.scrollTop;
-        } else {
-          DOM.scrollContainer.scrollTop = 0;
-        }
-        updateReadingProgress();
+        setTimeout(() => {
+          if (book.scrollTop && book.scrollTop > 0) {
+            DOM.scrollContainer.scrollTop = book.scrollTop;
+          } else {
+            DOM.scrollContainer.scrollTop = 0;
+          }
+          updateReadingProgress();
+        }, 50);
       });
     }
 
@@ -1023,7 +1035,7 @@
         return;
       }
 
-      App.tts.synth.cancel(); // Reset previous
+      App.tts.synth.cancel();
 
       const textToRead = DOM.contentWrapper.innerText;
       if (!textToRead || textToRead.trim().length === 0) {
@@ -1031,7 +1043,6 @@
         return;
       }
 
-      // Cut into manageable chunks for native Web Speech API stability
       const utterance = new SpeechSynthesisUtterance(textToRead.slice(0, 3000));
       utterance.lang = 'ko-KR';
       utterance.rate = App.tts.rate;
