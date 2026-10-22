@@ -5,15 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Lumina Reader</title>
 
-  <!-- iOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Lumina Reader">
   <meta name="theme-color" content="#0f172a">
   <meta name="mobile-web-app-capable" content="yes">
 
-  <!-- 고품질 홈 화면 아이콘 (SVG) -->
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%231e1b4b'/%3E%3Crect x='96' y='80' width='320' height='352' rx='28' fill='%23312e81'/%3E%3Cpath d='M128 120h256v24H128zm0 48h256v24H128zm0 48h180v24H128z' fill='%23a5b4fc'/%3E%3Ccircle cx='368' cy='360' r='56' fill='%236366f1'/%3E%3Cpath d='M350 360l14 14 28-28' stroke='white' stroke-width='12' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+  <!-- 홈 화면 아이콘 -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231e1b4b'/%3E%3Crect x='96' y='84' width='320' height='344' rx='26' fill='%23312e81'/%3E%3Cpath d='M128 124h256v22H128zm0 46h256v22H128zm0 46h176v22H128z' fill='%23a5b4fc'/%3E%3Ccircle cx='368' cy='356' r='54' fill='%236366f1'/%3E%3Cpath d='M351 356l13 13 26-26' stroke='white' stroke-width='11' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -28,96 +27,105 @@
     }
   </script>
 
-  <!-- Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script>
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  </script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    :root {
-      --header-h: 52px;
-    }
-    .pt-safe { padding-top: max(0.6rem, env(safe-area-inset-top)); }
-    .pb-safe { padding-bottom: max(0.6rem, env(safe-area-inset-bottom)); }
+    :root { --bar-h: 48px; }
 
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.35); border-radius: 99px; }
+    .pt-safe { padding-top: max(0.5rem, env(safe-area-inset-top)); }
+    .pb-safe { padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.3); border-radius: 99px; }
 
     .bg-art-home {
       background: #0f172a;
       background-image:
-        radial-gradient(at 0% 0%, rgba(99,102,241,0.18) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(168,85,247,0.14) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(99,102,241,0.16) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168,85,247,0.12) 0px, transparent 50%);
     }
 
-    /* 얇은 메뉴바 */
+    /* 매우 얇은 바 */
     .reader-header {
-      height: calc(var(--header-h) + env(safe-area-inset-top));
+      height: calc(var(--bar-h) + env(safe-area-inset-top));
       padding-top: env(safe-area-inset-top);
     }
     .reader-footer {
       padding-bottom: env(safe-area-inset-bottom);
     }
 
+    /* ===== 가독성 핵심 ===== */
     .reader-body {
       color: inherit;
       word-break: keep-all;
       overflow-wrap: break-word;
+      letter-spacing: -0.01em;
     }
     .reader-body p {
-      margin: 0 0 1.15em;
+      margin: 0 0 1.35em;
       line-height: inherit;
       text-align: justify;
+      text-justify: inter-ideograph;
     }
-    .reader-body p strong,
-    .reader-body p b {
+    .reader-body p + p {
+      margin-top: 0;
+    }
+    .reader-body strong, .reader-body b {
       font-weight: 700;
     }
+
+    /* 대사 카드 - 더 눈에 띄게 */
     .reader-body blockquote.dialogue-card {
-      margin: 1.1em 0;
-      padding: 0.75rem 1.1rem;
+      margin: 1.4em 0;
+      padding: 0.9rem 1.15rem;
       border-left: 3.5px solid #6366f1;
-      background: rgba(99,102,241,0.07);
-      border-radius: 0 0.6rem 0.6rem 0;
+      background: rgba(99,102,241,0.08);
+      border-radius: 0 0.7rem 0.7rem 0;
+      font-style: normal;
+      line-height: 1.75;
+    }
+    .dark .reader-body blockquote.dialogue-card {
+      border-left-color: #818cf8;
+      background: rgba(99,102,241,0.14);
     }
     .theme-sepia .reader-body blockquote.dialogue-card {
       border-left-color: #d97706;
-      background: rgba(217,119,6,0.08);
+      background: rgba(217,119,6,0.1);
     }
 
     .reader-body h1.doc-title {
-      font-size: 1.75rem;
+      font-size: 1.7rem;
       font-weight: 800;
       text-align: center;
-      margin: 1.2rem 0 2.4rem;
-      padding-bottom: 0.9rem;
-      border-bottom: 1.5px solid rgba(148,163,184,0.25);
-      letter-spacing: -0.02em;
+      margin: 0.8rem 0 2.2rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1.5px solid rgba(148,163,184,0.22);
+      letter-spacing: -0.03em;
     }
     .reader-body h2.chapter-header {
-      font-size: 1.22rem;
+      font-size: 1.18rem;
       font-weight: 700;
-      margin: 2.8rem 0 1.15rem;
-      padding-top: 0.4rem;
+      margin: 2.6rem 0 1.2rem;
+      padding-top: 0.3rem;
       color: #6366f1;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      scroll-margin-top: calc(var(--header-h) + env(safe-area-inset-top) + 12px);
+      gap: 0.35rem;
+      scroll-margin-top: calc(var(--bar-h) + env(safe-area-inset-top) + 10px);
     }
     .dark .reader-body h2.chapter-header { color: #a5b4fc; }
     .theme-sepia .reader-body h2.chapter-header { color: #b45309; }
 
     .nav-transition {
-      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease;
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
     }
-    .nav-hidden-top { transform: translateY(-110%); opacity: 0; pointer-events: none; }
-    .nav-hidden-bottom { transform: translateY(110%); opacity: 0; pointer-events: none; }
+    .nav-hidden-top { transform: translateY(-120%); opacity: 0; pointer-events: none; }
+    .nav-hidden-bottom { transform: translateY(120%); opacity: 0; pointer-events: none; }
 
     .line-clamp-2 {
       display: -webkit-box;
@@ -126,15 +134,14 @@
       overflow: hidden;
     }
 
-    /* 명조체 강제 적용용 */
     .font-myungjo {
-      font-family: "Apple Myungjo", "Nanum Myeongjo", "Noto Serif KR", "Batang", "Georgia", serif !important;
+      font-family: "Apple Myungjo", "Nanum Myeongjo", "Noto Serif KR", "Batang", Georgia, serif !important;
     }
   </style>
 </head>
 <body class="bg-slate-900 text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
 
-  <!-- ========== HOME ========== -->
+  <!-- HOME -->
   <div id="view-home" class="fixed inset-0 z-40 flex flex-col justify-between p-5 bg-art-home overflow-y-auto">
     <div class="pt-safe flex items-center justify-between">
       <div class="flex items-center gap-2.5">
@@ -193,7 +200,7 @@
     </div>
   </div>
 
-  <!-- ========== LIBRARY ========== -->
+  <!-- LIBRARY -->
   <div id="view-library" class="hidden fixed inset-0 z-30 flex flex-col bg-slate-900">
     <header class="pt-safe px-4 py-3 border-b border-slate-800/70 flex items-center justify-between bg-slate-900/95 backdrop-blur">
       <div class="flex items-center gap-2.5">
@@ -203,8 +210,7 @@
         <h2 class="text-base font-bold text-white">나의 서재</h2>
       </div>
       <button onclick="document.getElementById('file-input').click()" class="px-2.5 py-1.5 text-indigo-400 bg-indigo-500/10 rounded-lg text-xs font-semibold flex items-center gap-1">
-        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-        추가
+        <i data-lucide="plus" class="w-3.5 h-3.5"></i> 추가
       </button>
     </header>
 
@@ -230,18 +236,18 @@
     </div>
   </div>
 
-  <!-- ========== READER ========== -->
+  <!-- READER -->
   <div id="view-reader" class="hidden fixed inset-0 z-20 flex flex-col bg-slate-900 text-slate-100">
     <!-- 얇은 상단바 -->
-    <header id="reader-header" class="reader-header fixed top-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/60 flex items-center px-3 nav-transition">
+    <header id="reader-header" class="reader-header fixed top-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/50 flex items-center px-2.5 nav-transition">
       <button onclick="exitReader()" class="p-1.5 text-slate-400 hover:text-white rounded-lg shrink-0">
         <i data-lucide="arrow-left" class="w-4.5 h-4.5"></i>
       </button>
-      <div class="min-w-0 flex-1 mx-2">
+      <div class="min-w-0 flex-1 mx-1.5">
         <h3 id="reader-title" class="text-[12px] font-semibold text-slate-200 line-clamp-1 leading-tight"></h3>
         <p id="reader-sub" class="text-[10px] text-indigo-400/90 truncate">전체 스크롤</p>
       </div>
-      <div class="flex items-center gap-0.5 shrink-0">
+      <div class="flex items-center gap-0 shrink-0">
         <button onclick="toggleTOC()" class="p-1.5 text-slate-300 hover:text-white rounded-lg">
           <i data-lucide="list" class="w-4.5 h-4.5"></i>
         </button>
@@ -256,34 +262,34 @@
 
     <!-- 본문 (최대 영역) -->
     <main id="reader-scroll" class="flex-1 overflow-y-auto w-full">
-      <div class="max-w-2xl mx-auto px-5 pt-[calc(var(--header-h)+env(safe-area-inset-top)+18px)] pb-28">
+      <div class="max-w-2xl mx-auto px-5 pt-[calc(var(--bar-h)+env(safe-area-inset-top)+14px)] pb-24">
         <div id="reader-content" class="reader-body"></div>
       </div>
     </main>
 
     <!-- 얇은 하단바 -->
-    <footer id="reader-footer" class="reader-footer fixed bottom-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/60 px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-400 nav-transition">
+    <footer id="reader-footer" class="reader-footer fixed bottom-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/50 px-3.5 py-1 flex items-center justify-between text-[11px] text-slate-400 nav-transition">
       <span id="clock">00:00</span>
-      <div class="flex-1 max-w-[200px] mx-3 flex items-center gap-2">
+      <div class="flex-1 max-w-[180px] mx-2.5 flex items-center gap-2">
         <div class="flex-1 h-1 bg-slate-800 rounded-full overflow-hidden">
           <div id="progress-bar" class="h-full bg-indigo-500 transition-all duration-150" style="width:0%"></div>
         </div>
-        <span id="progress-text" class="font-mono w-9 text-right">0%</span>
+        <span id="progress-text" class="font-mono w-8 text-right">0%</span>
       </div>
       <button onclick="toggleComplete()" class="p-1 text-slate-400 hover:text-emerald-400">
         <i data-lucide="check-circle" class="w-4 h-4"></i>
       </button>
     </footer>
 
-    <!-- TTS 바 -->
-    <div id="tts-bar" class="hidden fixed bottom-14 left-3 right-3 md:left-auto md:right-6 md:w-80 z-40 p-3.5 bg-slate-800/95 border border-slate-700/70 rounded-2xl shadow-xl space-y-2.5">
+    <!-- TTS -->
+    <div id="tts-bar" class="hidden fixed bottom-12 left-3 right-3 md:left-auto md:right-5 md:w-72 z-40 p-3 bg-slate-800/95 border border-slate-700/60 rounded-2xl shadow-xl space-y-2">
       <div class="flex items-center justify-between">
         <span class="text-xs text-indigo-400 font-medium flex items-center gap-1.5">
           <i data-lucide="volume-2" class="w-3.5 h-3.5"></i> TTS
         </span>
         <button onclick="toggleTTS()" class="text-slate-400 p-0.5"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
-      <div class="flex items-center justify-center gap-5">
+      <div class="flex items-center justify-center gap-4">
         <button onclick="ttsMove(-1)" class="p-1.5 rounded-full bg-slate-700/70 text-slate-300"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>
         <button id="tts-btn" onclick="ttsToggle()" class="p-2.5 rounded-full bg-indigo-600 text-white"><i data-lucide="play" class="w-4.5 h-4.5 fill-current"></i></button>
         <button onclick="ttsMove(1)" class="p-1.5 rounded-full bg-slate-700/70 text-slate-300"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>
@@ -320,8 +326,8 @@
       <div class="space-y-1.5">
         <label class="text-[11px] font-medium text-slate-400">글꼴</label>
         <select id="font-family" onchange="applyStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
-          <option value="system">시스템 기본 (산세리프)</option>
-          <option value="myungjo">명조체 (Serif)</option>
+          <option value="system">시스템 기본</option>
+          <option value="myungjo">명조체</option>
           <option value="gothic">고딕체</option>
         </select>
       </div>
@@ -337,9 +343,9 @@
       <div class="space-y-1.5">
         <div class="flex justify-between text-[11px]">
           <span class="text-slate-400 font-medium">줄 간격</span>
-          <span id="line-height-label" class="text-indigo-400 font-mono">1.85</span>
+          <span id="line-height-label" class="text-indigo-400 font-mono">1.9</span>
         </div>
-        <input id="line-height" type="range" min="1.45" max="2.3" step="0.05" value="1.85" oninput="applyStyle()" class="w-full accent-indigo-500">
+        <input id="line-height" type="range" min="1.5" max="2.4" step="0.05" value="1.9" oninput="applyStyle()" class="w-full accent-indigo-500">
       </div>
     </div>
   </div>
@@ -394,19 +400,17 @@
   </div>
 
   <script>
-    // ===================== STATE =====================
-    const DB_KEY = 'lumina_v4';
-    const SET_KEY = 'lumina_set_v4';
+    const DB_KEY = 'lumina_v5';
+    const SET_KEY = 'lumina_set_v5';
 
     let books = [];
     let currentId = null;
     let chapters = [];
     let tab = 'reading';
-    let settings = { theme: 'dark', fontFamily: 'system', fontSize: 18, lineHeight: 1.85 };
+    let settings = { theme: 'dark', fontFamily: 'system', fontSize: 18, lineHeight: 1.9 };
     let lastY = 0, navHidden = false;
     let ttsOn = false, ttsRate = 1.0;
 
-    // ===================== INIT =====================
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       loadSettings();
@@ -429,23 +433,18 @@
       setTheme(settings.theme, false);
       applyStyle();
     }
-
-    function saveSettings() {
-      localStorage.setItem(SET_KEY, JSON.stringify(settings));
-    }
+    function saveSettings() { localStorage.setItem(SET_KEY, JSON.stringify(settings)); }
 
     function loadBooks() {
       try { books = JSON.parse(localStorage.getItem(DB_KEY) || '[]'); } catch(e){ books = []; }
       renderLibrary();
       document.getElementById('home-count').textContent = books.length + '권';
     }
-
     function saveBooks() {
       localStorage.setItem(DB_KEY, JSON.stringify(books));
       document.getElementById('home-count').textContent = books.length + '권';
     }
 
-    // ===================== VIEW =====================
     function switchView(name) {
       ['home','library','reader'].forEach(v => {
         document.getElementById('view-' + v).classList.toggle('hidden', v !== name);
@@ -464,7 +463,7 @@
       renderLibrary();
     }
 
-    // ===================== FILE LOAD =====================
+    // ===================== FILE =====================
     async function handleFile(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -473,23 +472,16 @@
 
       document.body.style.cursor = 'wait';
       try {
-        if (ext === 'txt') {
-          raw = await readText(file);
-        } else if (ext === 'md' || ext === 'markdown') {
-          raw = marked.parse(await readText(file));
-        } else if (ext === 'html' || ext === 'htm') {
-          raw = await readText(file);
-        } else if (ext === 'docx') {
-          const buf = await file.arrayBuffer();
-          const res = await mammoth.convertToHtml({ arrayBuffer: buf });
-          raw = res.value; // HTML 유지
-        } else if (ext === 'pdf') {
-          raw = await parsePDF(file);
-        } else if (ext === 'epub') {
-          raw = await parseEPUB(file);
-        } else {
-          raw = await readText(file);
+        if (ext === 'txt') raw = await readText(file);
+        else if (ext === 'md' || ext === 'markdown') raw = marked.parse(await readText(file));
+        else if (ext === 'html' || ext === 'htm') raw = await readText(file);
+        else if (ext === 'docx') {
+          const res = await mammoth.convertToHtml({ arrayBuffer: await file.arrayBuffer() });
+          raw = res.value;
         }
+        else if (ext === 'pdf') raw = await parsePDF(file);
+        else if (ext === 'epub') raw = await parseEPUB(file);
+        else raw = await readText(file);
 
         if (!raw || raw.replace(/\s/g,'').length < 15) {
           alert('읽을 수 있는 텍스트가 거의 없습니다.');
@@ -506,11 +498,9 @@
     }
 
     async function readText(file) {
-      const buf = await file.arrayBuffer();
-      const u8 = new Uint8Array(buf);
-      try {
-        return new TextDecoder('utf-8', { fatal: true }).decode(u8);
-      } catch {
+      const u8 = new Uint8Array(await file.arrayBuffer());
+      try { return new TextDecoder('utf-8', { fatal: true }).decode(u8); }
+      catch {
         try { return new TextDecoder('euc-kr').decode(u8); }
         catch { return new TextDecoder('utf-8').decode(u8); }
       }
@@ -532,180 +522,188 @@
           line += it.str + (it.hasEOL ? '\n' : ' ');
           lastY = y;
         });
-        if (line.trim()) text += line.trim() + '\n';
-        text += '\n';
+        if (line.trim()) text += line.trim() + '\n\n';
       }
       return text;
     }
 
-    // ===== EPUB (JSZip 기반 안정 추출) =====
     async function parseEPUB(file) {
       const zip = await JSZip.loadAsync(await file.arrayBuffer());
-      // container.xml → OPF 경로
       const container = await zip.file('META-INF/container.xml')?.async('text');
       if (!container) throw new Error('EPUB container.xml 없음');
-
       const opfMatch = container.match(/full-path=["']([^"']+)["']/);
-      if (!opfMatch) throw new Error('OPF 경로를 찾을 수 없음');
+      if (!opfMatch) throw new Error('OPF 경로 없음');
       const opfPath = opfMatch[1];
       const opfDir = opfPath.includes('/') ? opfPath.replace(/\/[^/]+$/, '/') : '';
-
       const opfText = await zip.file(opfPath).async('text');
-      // spine itemref 순서대로 idref 수집
-      const idrefs = [...opfText.matchAll(/<itemref[^>]+idref=["']([^"']+)["']/g)].map(m => m[1]);
 
-      // manifest에서 id → href 맵
+      const idrefs = [...opfText.matchAll(/<itemref[^>]+idref=["']([^"']+)["']/g)].map(m => m[1]);
       const idToHref = {};
-      [...opfText.matchAll(/<item[^>]+id=["']([^"']+)["'][^>]+href=["']([^"']+)["']/g)].forEach(m => {
-        idToHref[m[1]] = m[2];
-      });
-      // 반대 속성 순서도 대응
-      [...opfText.matchAll(/<item[^>]+href=["']([^"']+)["'][^>]+id=["']([^"']+)["']/g)].forEach(m => {
-        idToHref[m[2]] = m[1];
-      });
+      [...opfText.matchAll(/<item[^>]+id=["']([^"']+)["'][^>]+href=["']([^"']+)["']/g)].forEach(m => idToHref[m[1]] = m[2]);
+      [...opfText.matchAll(/<item[^>]+href=["']([^"']+)["'][^>]+id=["']([^"']+)["']/g)].forEach(m => idToHref[m[2]] = m[1]);
 
       let full = '';
       for (const id of idrefs) {
         const href = idToHref[id];
         if (!href) continue;
-        const fullPath = opfDir + href;
-        const entry = zip.file(fullPath) || zip.file(decodeURIComponent(fullPath));
+        const entry = zip.file(opfDir + href) || zip.file(decodeURIComponent(opfDir + href));
         if (!entry) continue;
         try {
           const html = await entry.async('text');
           const doc = new DOMParser().parseFromString(html, 'text/html');
-          doc.querySelectorAll('script, style, nav, header, footer').forEach(n => n.remove());
-          const bodyText = doc.body ? doc.body.innerText : '';
-          if (bodyText.trim()) full += bodyText.trim() + '\n\n';
-        } catch (e) {}
+          doc.querySelectorAll('script,style,nav,header,footer').forEach(n => n.remove());
+          const t = doc.body?.innerText?.trim();
+          if (t) full += t + '\n\n';
+        } catch(e){}
       }
-      if (!full.trim()) throw new Error('EPUB 본문을 추출하지 못했습니다');
+      if (!full.trim()) throw new Error('EPUB 본문 추출 실패');
       return full;
     }
 
-    // ===================== CONTENT PROCESS =====================
+    // ===================== 핵심: 문단 + 대사 분리 =====================
+    function isDialogue(text) {
+      const t = text.trim();
+      if (t.length < 2) return false;
+      // 한국어 소설에서 흔히 쓰는 인용부호
+      return (
+        (t.startsWith('「') && t.includes('」')) ||
+        (t.startsWith('“') && t.includes('”')) ||
+        (t.startsWith('"') && t.endsWith('"')) ||
+        (t.startsWith("'") && t.endsWith("'")) ||
+        (t.startsWith('‘') && t.includes('’'))
+      );
+    }
+
+    function splitMixedDialogue(text) {
+      // 한 문단 안에 대사와 지문이 섞여 있을 때 분리 시도
+      const parts = [];
+      // 「...」 또는 “...” 패턴을 찾아 분리
+      const re = /(「[^」]*」|“[^”]*”|"[^"]*"|'[^']*'|‘[^’]*’)/g;
+      let lastIndex = 0;
+      let match;
+      while ((match = re.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+          const before = text.slice(lastIndex, match.index).trim();
+          if (before) parts.push({ type: 'p', text: before });
+        }
+        parts.push({ type: 'dialogue', text: match[0].trim() });
+        lastIndex = re.lastIndex;
+      }
+      if (lastIndex < text.length) {
+        const after = text.slice(lastIndex).trim();
+        if (after) parts.push({ type: 'p', text: after });
+      }
+      return parts.length ? parts : [{ type: isDialogue(text) ? 'dialogue' : 'p', text }];
+    }
+
     function processContent(raw, title) {
-      // HTML인 경우 구조 유지하면서 파싱
-      let isHTML = /<[a-z][\s\S]*>/i.test(raw);
-      let chapters = [];
-      let fullHtml = '';
+      const isHTML = /<[a-z][\s\S]*>/i.test(raw);
+      let blocks = []; // {type: 'p'|'dialogue'|'h', text, level?}
 
       if (isHTML) {
         const doc = new DOMParser().parseFromString(raw, 'text/html');
         doc.querySelectorAll('script, style, noscript').forEach(n => n.remove());
 
-        // 제목/챕터 후보
-        const headings = doc.querySelectorAll('h1, h2, h3, h4');
-        const allBlocks = [];
+        // p, div, h1~h4, li 등을 순서대로 수집
+        const candidates = doc.body ? doc.body.querySelectorAll('h1,h2,h3,h4,p,div,li,blockquote') : [];
+        const seen = new Set();
 
-        // body의 주요 블록을 순서대로 수집
-        const walk = (node) => {
-          if (node.nodeType === 3) { // text
-            const t = node.textContent.replace(/\s+/g, ' ').trim();
-            if (t) allBlocks.push({ type: 'p', text: t });
+        candidates.forEach(el => {
+          // 이미 처리된 자손이면 스킵
+          if (seen.has(el)) return;
+          const tag = el.tagName.toLowerCase();
+          let text = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
+          if (!text || text.length < 1) return;
+
+          // 자식에 또 다른 블록이 있으면 이 노드는 건너뛰고 자식이 처리되도록
+          if (el.querySelector('p,h1,h2,h3,h4,div,li')) {
+            // 너무 큰 컨테이너는 무시
             return;
           }
-          if (node.nodeType !== 1) return;
-          const tag = node.tagName.toLowerCase();
-          if (['script','style','nav','header','footer'].includes(tag)) return;
 
+          seen.add(el);
           if (['h1','h2','h3','h4'].includes(tag)) {
-            allBlocks.push({ type: 'h', level: +tag[1], text: node.textContent.trim() });
-          } else if (tag === 'p' || tag === 'div' || tag === 'li') {
-            const t = node.innerText.replace(/\s+/g, ' ').trim();
-            if (t) allBlocks.push({ type: 'p', text: t, html: node.innerHTML });
-          } else if (tag === 'br') {
-            allBlocks.push({ type: 'br' });
+            blocks.push({ type: 'h', level: +tag[1], text });
           } else {
-            Array.from(node.childNodes).forEach(walk);
-          }
-        };
-        walk(doc.body || doc);
-
-        // 챕터 분리
-        let cur = { title: '본문', blocks: [] };
-        const push = () => {
-          if (cur.blocks.length) chapters.push({ ...cur, id: 'ch' + chapters.length });
-        };
-
-        allBlocks.forEach(b => {
-          if (b.type === 'h' && b.text.length < 80) {
-            push();
-            cur = { title: b.text, blocks: [] };
-          } else if (b.type === 'p') {
-            cur.blocks.push(b);
+            // 대사 분리
+            const parts = splitMixedDialogue(text);
+            parts.forEach(p => blocks.push(p));
           }
         });
-        push();
 
-        if (chapters.length === 0) {
-          chapters = [{ id: 'ch0', title: '본문', blocks: allBlocks.filter(b => b.type === 'p') }];
-        }
-
-        // HTML 생성
-        fullHtml = `<h1 class="doc-title">${esc(title)}</h1>`;
-        chapters.forEach(ch => {
-          fullHtml += `<h2 class="chapter-header" id="${ch.id}"><i data-lucide="bookmark" class="w-4 h-4"></i><span>${esc(ch.title)}</span></h2>`;
-          ch.blocks.forEach(b => {
-            if (!b.text) return;
-            // 대화 감지
-            if (/^[「“"']/.test(b.text) && /[」”"']$/.test(b.text)) {
-              fullHtml += `<blockquote class="dialogue-card">${esc(b.text)}</blockquote>`;
-            } else {
-              // 볼드 유지 시도
-              let content = b.html ? sanitizeInline(b.html) : esc(b.text);
-              fullHtml += `<p>${content}</p>`;
-            }
+        // fallback: 아무것도 못 찾으면 body 텍스트
+        if (blocks.length === 0) {
+          const t = doc.body?.innerText || '';
+          t.split(/\n+/).forEach(line => {
+            line = line.trim();
+            if (!line) return;
+            const parts = splitMixedDialogue(line);
+            parts.forEach(p => blocks.push(p));
           });
-        });
+        }
       } else {
         // 순수 텍스트
-        let lines = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').map(l => l.trim());
-        // 연속 빈줄 정리
-        lines = lines.filter((l, i, a) => l || (i > 0 && a[i-1]));
-
-        const re = /^(제\s*\d+\s*[장화편절]|Chapter\s*\d+|\d+\s*[화장편]|#{1,3}\s+.+$)/i;
-        let cur = { title: '본문', lines: [] };
-        const push = () => {
-          if (cur.lines.length) chapters.push({ ...cur, id: 'ch' + chapters.length });
-        };
-        lines.forEach(l => {
-          if (l && re.test(l) && l.length < 70) {
-            push();
-            cur = { title: l, lines: [] };
-          } else {
-            cur.lines.push(l);
-          }
-        });
-        push();
-        if (!chapters.length) chapters = [{ id: 'ch0', title: '본문', lines }];
-
-        fullHtml = `<h1 class="doc-title">${esc(title)}</h1>`;
-        chapters.forEach(ch => {
-          fullHtml += `<h2 class="chapter-header" id="${ch.id}"><i data-lucide="bookmark" class="w-4 h-4"></i><span>${esc(ch.title)}</span></h2>`;
-          ch.lines.forEach(l => {
-            if (!l) return;
-            if (/^[「“"']/.test(l) && /[」”"']$/.test(l)) {
-              fullHtml += `<blockquote class="dialogue-card">${esc(l)}</blockquote>`;
-            } else {
-              fullHtml += `<p>${esc(l)}</p>`;
-            }
-          });
+        let lines = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+        lines = lines.map(l => l.trim()).filter((l, i, arr) => l || (i > 0 && arr[i-1]));
+        lines.forEach(line => {
+          if (!line) return;
+          const parts = splitMixedDialogue(line);
+          parts.forEach(p => blocks.push(p));
         });
       }
+
+      // 챕터 분리
+      const chapterRe = /^(제\s*\d+\s*[장화편절]|Chapter\s*\d+|\d+\s*[화장편]|#{1,3}\s+.+$)/i;
+      let chapters = [];
+      let cur = { title: '본문', blocks: [] };
+
+      const push = () => {
+        if (cur.blocks.length) {
+          chapters.push({ id: 'ch' + chapters.length, title: cur.title, blocks: [...cur.blocks] });
+        }
+      };
+
+      blocks.forEach(b => {
+        if (b.type === 'h' && b.text.length < 80) {
+          push();
+          cur = { title: b.text, blocks: [] };
+        } else if (b.type === 'p' || b.type === 'dialogue') {
+          // 텍스트 라인 중에서 챕터처럼 보이는 것도 처리
+          if (b.type === 'p' && chapterRe.test(b.text) && b.text.length < 70) {
+            push();
+            cur = { title: b.text, blocks: [] };
+          } else {
+            cur.blocks.push(b);
+          }
+        }
+      });
+      push();
+
+      if (chapters.length === 0) {
+        chapters = [{ id: 'ch0', title: '본문', blocks }];
+      }
+
+      // HTML 생성
+      let fullHtml = `<h1 class="doc-title">${esc(title)}</h1>`;
+      chapters.forEach(ch => {
+        fullHtml += `<h2 class="chapter-header" id="${ch.id}">
+          <i data-lucide="bookmark" class="w-4 h-4"></i>
+          <span>${esc(ch.title)}</span>
+        </h2>`;
+        ch.blocks.forEach(b => {
+          if (!b.text) return;
+          if (b.type === 'dialogue' || isDialogue(b.text)) {
+            fullHtml += `<blockquote class="dialogue-card">${esc(b.text)}</blockquote>`;
+          } else {
+            fullHtml += `<p>${esc(b.text)}</p>`;
+          }
+        });
+      });
 
       return {
         fullHtml,
         chapters: chapters.map(c => ({ id: c.id, title: c.title }))
       };
-    }
-
-    function sanitizeInline(html) {
-      // 기본 인라인 태그만 허용
-      return html
-        .replace(/<script[\s\S]*?<\/script>/gi, '')
-        .replace(/<(?!\/?(strong|b|em|i|br)\b)[^>]+>/gi, '')
-        .replace(/&nbsp;/g, ' ');
     }
 
     function esc(s) {
@@ -789,7 +787,7 @@
       chapters = book.chapters || [];
 
       document.getElementById('reader-title').textContent = book.title;
-      document.getElementById('reader-sub').textContent = `전체 ${chapters.length}개 챕터 · 스크롤`;
+      document.getElementById('reader-sub').textContent = `전체 ${chapters.length}개 챕터`;
 
       const content = document.getElementById('reader-content');
       content.innerHTML = book.html || '<p class="text-slate-400">내용 없음</p>';
@@ -803,9 +801,7 @@
         if (book.percent > 1) {
           const max = sc.scrollHeight - sc.clientHeight;
           sc.scrollTop = max * (book.percent / 100);
-        } else {
-          sc.scrollTop = 0;
-        }
+        } else sc.scrollTop = 0;
         updateProgress();
       });
     }
@@ -843,7 +839,7 @@
       sc.addEventListener('scroll', () => {
         const y = sc.scrollTop;
         updateProgress();
-        if (y > lastY && y > 40) {
+        if (y > lastY && y > 30) {
           if (!navHidden) {
             header.classList.add('nav-hidden-top');
             footer.classList.add('nav-hidden-bottom');
@@ -872,20 +868,20 @@
 
       if (t === 'dark') {
         view.classList.add('bg-slate-900', 'text-slate-100');
-        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/60 flex items-center px-3 nav-transition';
-        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/60 px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-400 nav-transition';
+        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/50 flex items-center px-2.5 nav-transition';
+        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/50 px-3.5 py-1 flex items-center justify-between text-[11px] text-slate-400 nav-transition';
       } else if (t === 'light') {
         view.classList.add('bg-white', 'text-slate-900');
-        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 flex items-center px-3 nav-transition text-slate-800';
-        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-500 nav-transition';
+        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 flex items-center px-2.5 nav-transition text-slate-800';
+        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3.5 py-1 flex items-center justify-between text-[11px] text-slate-500 nav-transition';
       } else if (t === 'sepia') {
         view.classList.add('bg-sepia-100', 'text-sepia-900', 'theme-sepia');
-        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-sepia-100/95 backdrop-blur-md border-b border-sepia-200 flex items-center px-3 nav-transition text-sepia-900';
-        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-sepia-100/95 backdrop-blur-md border-t border-sepia-200 px-4 py-1.5 flex items-center justify-between text-[11px] text-sepia-800 nav-transition';
+        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-sepia-100/95 backdrop-blur-md border-b border-sepia-200 flex items-center px-2.5 nav-transition text-sepia-900';
+        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-sepia-100/95 backdrop-blur-md border-t border-sepia-200 px-3.5 py-1 flex items-center justify-between text-[11px] text-sepia-800 nav-transition';
       } else {
         view.classList.add('bg-black', 'text-slate-200');
-        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-md border-b border-zinc-800 flex items-center px-3 nav-transition';
-        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-md border-t border-zinc-800 px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-500 nav-transition';
+        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-md border-b border-zinc-800 flex items-center px-2.5 nav-transition';
+        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-md border-t border-zinc-800 px-3.5 py-1 flex items-center justify-between text-[11px] text-slate-500 nav-transition';
       }
       if (save) saveSettings();
     }
@@ -915,9 +911,7 @@
     }
 
     // ===================== TTS =====================
-    function toggleTTS() {
-      document.getElementById('tts-bar').classList.toggle('hidden');
-    }
+    function toggleTTS() { document.getElementById('tts-bar').classList.toggle('hidden'); }
     function ttsToggle() {
       if (ttsOn) {
         speechSynthesis.cancel();
@@ -947,17 +941,15 @@
         b.classList.add('bg-slate-700');
       });
       event.target.classList.add('bg-indigo-600', 'text-white');
-      if (ttsOn) ttsToggle(), ttsToggle();
+      if (ttsOn) { ttsToggle(); ttsToggle(); }
     }
     function ttsMove(dir) {
-      document.getElementById('reader-scroll').scrollTop += dir * 450;
+      document.getElementById('reader-scroll').scrollTop += dir * 420;
       if (ttsOn) { speechSynthesis.cancel(); ttsOn = false; ttsToggle(); }
     }
 
     // ===================== MODALS =====================
-    function toggleSettings() {
-      document.getElementById('modal-settings').classList.toggle('hidden');
-    }
+    function toggleSettings() { document.getElementById('modal-settings').classList.toggle('hidden'); }
     function toggleTOC() {
       const m = document.getElementById('modal-toc');
       m.classList.toggle('hidden');
