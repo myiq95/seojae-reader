@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Lumina Reader</title>
 
-  <!-- iOS 전체화면 설정 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Lumina Reader">
   <meta name="theme-color" content="#0f172a">
   <meta name="mobile-web-app-capable" content="yes">
 
+  <!-- 홈 화면 아이콘 -->
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231e1b4b'/%3E%3Crect x='96' y='84' width='320' height='344' rx='26' fill='%23312e81'/%3E%3Cpath d='M128 124h256v22H128zm0 46h256v22H128zm0 46h176v22H128z' fill='%23a5b4fc'/%3E%3Ccircle cx='368' cy='356' r='54' fill='%236366f1'/%3E%3Cpath d='M351 356l13 13 26-26' stroke='white' stroke-width='11' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
 
-  <!-- 나눔명조 + 본고딕 -->
+  <!-- 나눔명조 + 본고딕 웹폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -40,9 +40,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    :root {
-      --header-content-h: 44px; /* 실제 버튼 영역 높이 */
-    }
+    :root { --bar-h: 48px; }
 
     .pt-safe { padding-top: max(0.5rem, env(safe-area-inset-top)); }
     .pb-safe { padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); }
@@ -57,48 +55,14 @@
         radial-gradient(at 100% 100%, rgba(168,85,247,0.12) 0px, transparent 50%);
     }
 
-    /* ===== 전체화면용 상단바 (노치/아일랜드 대응) ===== */
     .reader-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 40;
+      height: calc(var(--bar-h) + env(safe-area-inset-top));
       padding-top: env(safe-area-inset-top);
-      height: calc(var(--header-content-h) + env(safe-area-inset-top));
-      display: flex;
-      align-items: flex-end; /* 버튼을 아래쪽에 배치 → 아일랜드 양옆 활용 */
-      background: rgba(15, 23, 42, 0.82);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(51, 65, 85, 0.4);
-      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease;
     }
-
-    .reader-header-inner {
-      height: var(--header-content-h);
-      width: 100%;
-      display: flex;
-      align-items: center;
-      padding: 0 6px;
-    }
-
     .reader-footer {
       padding-bottom: env(safe-area-inset-bottom);
     }
 
-    .nav-hidden-top {
-      transform: translateY(-110%);
-      opacity: 0;
-      pointer-events: none;
-    }
-    .nav-hidden-bottom {
-      transform: translateY(110%);
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* 본문 */
     .reader-body {
       color: inherit;
       word-break: keep-all;
@@ -110,7 +74,9 @@
       line-height: inherit;
       text-align: justify;
     }
-    .reader-body strong, .reader-body b { font-weight: 700; }
+    .reader-body strong, .reader-body b {
+      font-weight: 700;
+    }
 
     .reader-body blockquote.dialogue-card {
       margin: 1.4em 0;
@@ -145,10 +111,16 @@
       display: flex;
       align-items: center;
       gap: 0.35rem;
-      scroll-margin-top: calc(var(--header-content-h) + env(safe-area-inset-top) + 12px);
+      scroll-margin-top: calc(var(--bar-h) + env(safe-area-inset-top) + 10px);
     }
     .dark .reader-body h2.chapter-header { color: #a5b4fc; }
     .theme-sepia .reader-body h2.chapter-header { color: #b45309; }
+
+    .nav-transition {
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+    }
+    .nav-hidden-top { transform: translateY(-120%); opacity: 0; pointer-events: none; }
+    .nav-hidden-bottom { transform: translateY(120%); opacity: 0; pointer-events: none; }
 
     .line-clamp-2 {
       display: -webkit-box;
@@ -157,6 +129,7 @@
       overflow: hidden;
     }
 
+    /* 명조체 강제 적용 */
     .font-myungjo {
       font-family: "Nanum Myeongjo", "Apple Myungjo", "Noto Serif KR", serif !important;
     }
@@ -262,61 +235,49 @@
     </div>
   </div>
 
-  <!-- ==================== READER (전체화면) ==================== -->
+  <!-- READER -->
   <div id="view-reader" class="hidden fixed inset-0 z-20 flex flex-col bg-slate-900 text-slate-100">
-
-    <!-- 상단바: 노치/아일랜드 좌우에 버튼 배치 -->
-    <header id="reader-header" class="reader-header">
-      <div class="reader-header-inner">
-        <!-- 왼쪽 (아일랜드 왼쪽 공간) -->
-        <button onclick="exitReader()" class="w-10 h-10 flex items-center justify-center text-slate-300 active:text-white rounded-full">
-          <i data-lucide="chevron-left" class="w-6 h-6"></i>
+    <header id="reader-header" class="reader-header fixed top-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/50 flex items-center px-2.5 nav-transition">
+      <button onclick="exitReader()" class="p-1.5 text-slate-400 hover:text-white rounded-lg shrink-0">
+        <i data-lucide="arrow-left" class="w-4.5 h-4.5"></i>
+      </button>
+      <div class="min-w-0 flex-1 mx-1.5">
+        <h3 id="reader-title" class="text-[12px] font-semibold text-slate-200 line-clamp-1 leading-tight"></h3>
+        <p id="reader-sub" class="text-[10px] text-indigo-400/90 truncate">전체 스크롤</p>
+      </div>
+      <div class="flex items-center gap-0 shrink-0">
+        <button onclick="toggleTOC()" class="p-1.5 text-slate-300 hover:text-white rounded-lg">
+          <i data-lucide="list" class="w-4.5 h-4.5"></i>
         </button>
-
-        <!-- 중앙 제목 -->
-        <div class="flex-1 min-w-0 px-1 text-center">
-          <h3 id="reader-title" class="text-[13px] font-semibold text-slate-100 truncate leading-tight"></h3>
-          <p id="reader-sub" class="text-[10px] text-indigo-400/80 truncate mt-0.5">전체 스크롤</p>
-        </div>
-
-        <!-- 오른쪽 (아일랜드 오른쪽 공간) -->
-        <div class="flex items-center">
-          <button onclick="toggleTOC()" class="w-9 h-10 flex items-center justify-center text-slate-300 active:text-white">
-            <i data-lucide="list" class="w-5 h-5"></i>
-          </button>
-          <button onclick="toggleSettings()" class="w-9 h-10 flex items-center justify-center text-slate-300 active:text-white">
-            <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
-          </button>
-          <button onclick="toggleTTS()" class="w-9 h-10 flex items-center justify-center text-indigo-400 active:text-indigo-300">
-            <i data-lucide="volume-2" class="w-5 h-5"></i>
-          </button>
-        </div>
+        <button onclick="toggleSettings()" class="p-1.5 text-slate-300 hover:text-white rounded-lg">
+          <i data-lucide="sliders-horizontal" class="w-4.5 h-4.5"></i>
+        </button>
+        <button onclick="toggleTTS()" class="p-1.5 text-indigo-400 rounded-lg">
+          <i data-lucide="volume-2" class="w-4.5 h-4.5"></i>
+        </button>
       </div>
     </header>
 
-    <!-- 본문 -->
     <main id="reader-scroll" class="flex-1 overflow-y-auto w-full">
-      <div class="max-w-2xl mx-auto px-5 pt-[calc(var(--header-content-h)+env(safe-area-inset-top)+16px)] pb-28">
+      <div class="max-w-2xl mx-auto px-5 pt-[calc(var(--bar-h)+env(safe-area-inset-top)+14px)] pb-24">
         <div id="reader-content" class="reader-body"></div>
       </div>
     </main>
 
-    <!-- 하단바 -->
-    <footer id="reader-footer" class="fixed bottom-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/50 px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-400 reader-footer transition-transform duration-280">
+    <footer id="reader-footer" class="reader-footer fixed bottom-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/50 px-3.5 py-1 flex items-center justify-between text-[11px] text-slate-400 nav-transition">
       <span id="clock">00:00</span>
-      <div class="flex-1 max-w-[180px] mx-3 flex items-center gap-2">
+      <div class="flex-1 max-w-[180px] mx-2.5 flex items-center gap-2">
         <div class="flex-1 h-1 bg-slate-800 rounded-full overflow-hidden">
           <div id="progress-bar" class="h-full bg-indigo-500 transition-all duration-150" style="width:0%"></div>
         </div>
         <span id="progress-text" class="font-mono w-8 text-right">0%</span>
       </div>
-      <button onclick="toggleComplete()" class="p-1 text-slate-400 active:text-emerald-400">
+      <button onclick="toggleComplete()" class="p-1 text-slate-400 hover:text-emerald-400">
         <i data-lucide="check-circle" class="w-4 h-4"></i>
       </button>
     </footer>
 
-    <!-- TTS -->
-    <div id="tts-bar" class="hidden fixed bottom-14 left-3 right-3 z-40 p-3 bg-slate-800/95 border border-slate-700/60 rounded-2xl shadow-xl space-y-2">
+    <div id="tts-bar" class="hidden fixed bottom-12 left-3 right-3 md:left-auto md:right-5 md:w-72 z-40 p-3 bg-slate-800/95 border border-slate-700/60 rounded-2xl shadow-xl space-y-2">
       <div class="flex items-center justify-between">
         <span class="text-xs text-indigo-400 font-medium flex items-center gap-1.5">
           <i data-lucide="volume-2" class="w-3.5 h-3.5"></i> TTS
@@ -434,8 +395,8 @@
   </div>
 
   <script>
-    const DB_KEY = 'lumina_v6';
-    const SET_KEY = 'lumina_set_v6';
+    const DB_KEY = 'lumina_v5';
+    const SET_KEY = 'lumina_set_v5';
 
     let books = [];
     let currentId = null;
@@ -594,7 +555,7 @@
       return full;
     }
 
-    // ===================== 문단 + 대사 =====================
+    // ===================== 문단 + 대사 분리 =====================
     function isDialogue(text) {
       const t = text.trim();
       if (t.length < 2) return false;
@@ -643,13 +604,15 @@
           const tag = el.tagName.toLowerCase();
           let text = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
           if (!text) return;
+
           if (el.querySelector('p,h1,h2,h3,h4,div,li')) return;
 
           seen.add(el);
           if (['h1','h2','h3','h4'].includes(tag)) {
             blocks.push({ type: 'h', level: +tag[1], text });
           } else {
-            splitMixedDialogue(text).forEach(p => blocks.push(p));
+            const parts = splitMixedDialogue(text);
+            parts.forEach(p => blocks.push(p));
           }
         });
 
@@ -811,11 +774,6 @@
 
       switchView('reader');
 
-      // 상단바 보이게 초기화
-      document.getElementById('reader-header').classList.remove('nav-hidden-top');
-      document.getElementById('reader-footer').classList.remove('nav-hidden-bottom');
-      navHidden = false;
-
       requestAnimationFrame(() => {
         const sc = document.getElementById('reader-scroll');
         if (book.percent > 1) {
@@ -859,16 +817,13 @@
       sc.addEventListener('scroll', () => {
         const y = sc.scrollTop;
         updateProgress();
-
-        if (y > lastY && y > 40) {
-          // 아래로 스크롤 → 바 숨김
+        if (y > lastY && y > 30) {
           if (!navHidden) {
             header.classList.add('nav-hidden-top');
             footer.classList.add('nav-hidden-bottom');
             navHidden = true;
           }
         } else {
-          // 위로 스크롤 → 바 표시
           if (navHidden) {
             header.classList.remove('nav-hidden-top');
             footer.classList.remove('nav-hidden-bottom');
@@ -889,23 +844,22 @@
       view.className = 'fixed inset-0 z-20 flex flex-col transition-colors duration-200';
       view.classList.remove('theme-sepia');
 
-      // 헤더는 항상 반투명 다크 계열로 유지 (노치 대응)
       if (t === 'dark') {
         view.classList.add('bg-slate-900', 'text-slate-100');
-        header.style.background = 'rgba(15, 23, 42, 0.82)';
-        footer.className = 'fixed bottom-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/50 px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-400 reader-footer transition-transform duration-280';
+        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/50 flex items-center px-2.5 nav-transition';
+        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-slate-900/90 backdrop-blur-md border-t border-slate-800/50 px-3.5 py-1 flex items-center justify-between text-[11px] text-slate-400 nav-transition';
       } else if (t === 'light') {
         view.classList.add('bg-white', 'text-slate-900');
-        header.style.background = 'rgba(255, 255, 255, 0.88)';
-        footer.className = 'fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-500 reader-footer transition-transform duration-280';
+        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 flex items-center px-2.5 nav-transition text-slate-800';
+        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3.5 py-1 flex items-center justify-between text-[11px] text-slate-500 nav-transition';
       } else if (t === 'sepia') {
         view.classList.add('bg-sepia-100', 'text-sepia-900', 'theme-sepia');
-        header.style.background = 'rgba(244, 236, 216, 0.9)';
-        footer.className = 'fixed bottom-0 left-0 right-0 z-30 bg-sepia-100/95 backdrop-blur-md border-t border-sepia-200 px-4 py-1.5 flex items-center justify-between text-[11px] text-sepia-800 reader-footer transition-transform duration-280';
+        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-sepia-100/95 backdrop-blur-md border-b border-sepia-200 flex items-center px-2.5 nav-transition text-sepia-900';
+        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-sepia-100/95 backdrop-blur-md border-t border-sepia-200 px-3.5 py-1 flex items-center justify-between text-[11px] text-sepia-800 nav-transition';
       } else {
         view.classList.add('bg-black', 'text-slate-200');
-        header.style.background = 'rgba(0, 0, 0, 0.85)';
-        footer.className = 'fixed bottom-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-md border-t border-zinc-800 px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-500 reader-footer transition-transform duration-280';
+        header.className = 'reader-header fixed top-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-md border-b border-zinc-800 flex items-center px-2.5 nav-transition';
+        footer.className = 'reader-footer fixed bottom-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-md border-t border-zinc-800 px-3.5 py-1 flex items-center justify-between text-[11px] text-slate-500 nav-transition';
       }
       if (save) saveSettings();
     }
@@ -919,6 +873,7 @@
       document.getElementById('font-size-label').textContent = settings.fontSize + 'px';
       document.getElementById('line-height-label').textContent = settings.lineHeight;
 
+      // 클래스 초기화
       content.classList.remove('font-myungjo', 'font-gothic');
 
       if (settings.fontFamily === 'myungjo') {
