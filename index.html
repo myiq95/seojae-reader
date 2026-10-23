@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Lumina Reader</title>
 
-  <!-- iOS 전체화면 + 반투명 상태바 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Lumina Reader">
@@ -39,16 +38,15 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    :root {
-      --bar-h: 44px; /* 실제 콘텐츠 높이 */
-    }
+    :root { --bar-h: 44px; }
 
-    /* 전체화면을 위해 body와 html을 꽉 채움 */
     html, body {
       height: 100%;
       height: 100dvh;
       overflow: hidden;
       background: #0f172a;
+      margin: 0;
+      padding: 0;
     }
 
     .pt-safe { padding-top: max(0.5rem, env(safe-area-inset-top)); }
@@ -64,57 +62,48 @@
         radial-gradient(at 100% 100%, rgba(168,85,247,0.12) 0px, transparent 50%);
     }
 
-    /* ===== 핵심: 상단바를 노치까지 확장 ===== */
+    /* 상단바 - 노치까지 확장 */
     .reader-header {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 30;
-      /* 배경이 상태바/노치 영역까지 완전히 덮음 */
       padding-top: env(safe-area-inset-top);
       height: calc(var(--bar-h) + env(safe-area-inset-top));
       display: flex;
       align-items: center;
-      background: rgba(15, 23, 42, 0.94); /* 거의 불투명하게 상태바를 가림 */
+      background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.45);
     }
 
     .reader-footer {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       z-index: 30;
       padding-bottom: env(safe-area-inset-bottom);
-      background: rgba(15, 23, 42, 0.94);
+      background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(51, 65, 85, 0.5);
+      border-top: 1px solid rgba(51, 65, 85, 0.45);
     }
 
-    /* 본문이 상단바 높이만큼 여백을 가짐 */
     .reader-content-wrapper {
-      padding-top: calc(var(--bar-h) + env(safe-area-inset-top) + 12px);
-      padding-bottom: calc(52px + env(safe-area-inset-bottom));
+      padding-top: calc(var(--bar-h) + env(safe-area-inset-top) + 16px);
+      padding-bottom: calc(56px + env(safe-area-inset-bottom));
     }
 
     .reader-body {
       color: inherit;
       word-break: keep-all;
       overflow-wrap: break-word;
-      letter-spacing: -0.01em;
     }
     .reader-body p {
       margin: 0 0 1.35em;
       line-height: inherit;
       text-align: justify;
     }
-    .reader-body strong, .reader-body b {
-      font-weight: 700;
-    }
+    .reader-body strong, .reader-body b { font-weight: 700; }
 
     .reader-body blockquote.dialogue-card {
       margin: 1.4em 0;
@@ -149,7 +138,7 @@
       display: flex;
       align-items: center;
       gap: 0.35rem;
-      scroll-margin-top: calc(var(--bar-h) + env(safe-area-inset-top) + 10px);
+      scroll-margin-top: calc(var(--bar-h) + env(safe-area-inset-top) + 12px);
     }
     .dark .reader-body h2.chapter-header { color: #a5b4fc; }
     .theme-sepia .reader-body h2.chapter-header { color: #b45309; }
@@ -157,16 +146,8 @@
     .nav-transition {
       transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease;
     }
-    .nav-hidden-top {
-      transform: translateY(-110%);
-      opacity: 0;
-      pointer-events: none;
-    }
-    .nav-hidden-bottom {
-      transform: translateY(110%);
-      opacity: 0;
-      pointer-events: none;
-    }
+    .nav-hidden-top { transform: translateY(-120%); opacity: 0; pointer-events: none; }
+    .nav-hidden-bottom { transform: translateY(120%); opacity: 0; pointer-events: none; }
 
     .line-clamp-2 {
       display: -webkit-box;
@@ -176,14 +157,14 @@
     }
 
     .font-myungjo {
-      font-family: "Nanum Myeongjo", "Apple Myungjo", "Noto Serif KR", serif !important;
+      font-family: "Nanum Myeongjo", "Apple Myungjo", serif !important;
     }
     .font-gothic {
       font-family: "Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif !important;
     }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-900 text-slate-100 antialiased">
 
   <!-- HOME -->
   <div id="view-home" class="fixed inset-0 z-40 flex flex-col justify-between p-5 bg-art-home overflow-y-auto">
@@ -215,7 +196,7 @@
       </div>
 
       <div class="space-y-2.5">
-        <button onclick="switchView('library')" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold text-sm shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2.5 active:scale-[0.98] transition">
+        <button onclick="switchView('library')" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold text-sm shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2.5 active:scale-[0.98]">
           <i data-lucide="bookmark" class="w-4.5 h-4.5"></i>
           <span>내 서재 열기</span>
           <span id="home-count" class="ml-auto px-2 py-0.5 text-[11px] bg-white/20 rounded-full">0권</span>
@@ -280,10 +261,8 @@
     </div>
   </div>
 
-  <!-- READER (전체화면 몰입) -->
+  <!-- READER -->
   <div id="view-reader" class="hidden fixed inset-0 z-20 flex flex-col bg-slate-900 text-slate-100">
-    
-    <!-- 상단바: 노치/아일랜드까지 배경 확장 -->
     <header id="reader-header" class="reader-header nav-transition">
       <div class="flex items-center w-full h-[44px] px-2.5">
         <button onclick="exitReader()" class="p-1.5 text-slate-400 hover:text-white rounded-lg shrink-0">
@@ -307,14 +286,12 @@
       </div>
     </header>
 
-    <!-- 본문 -->
     <main id="reader-scroll" class="flex-1 overflow-y-auto w-full">
       <div class="reader-content-wrapper max-w-2xl mx-auto px-5">
         <div id="reader-content" class="reader-body"></div>
       </div>
     </main>
 
-    <!-- 하단바 -->
     <footer id="reader-footer" class="reader-footer nav-transition">
       <div class="flex items-center justify-between h-10 px-3.5 text-[11px] text-slate-400">
         <span id="clock">00:00</span>
@@ -330,8 +307,7 @@
       </div>
     </footer>
 
-    <!-- TTS -->
-    <div id="tts-bar" class="hidden fixed bottom-14 left-3 right-3 md:left-auto md:right-5 md:w-72 z-40 p-3 bg-slate-800/95 border border-slate-700/60 rounded-2xl shadow-xl space-y-2">
+    <div id="tts-bar" class="hidden fixed bottom-14 left-3 right-3 z-40 p-3 bg-slate-800/95 border border-slate-700/60 rounded-2xl shadow-xl space-y-2">
       <div class="flex items-center justify-between">
         <span class="text-xs text-indigo-400 font-medium flex items-center gap-1.5">
           <i data-lucide="volume-2" class="w-3.5 h-3.5"></i> TTS
@@ -361,7 +337,6 @@
         </h3>
         <button onclick="toggleSettings()" class="p-1 text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-
       <div class="space-y-1.5">
         <label class="text-[11px] font-medium text-slate-400">테마</label>
         <div class="grid grid-cols-4 gap-1.5">
@@ -371,16 +346,14 @@
           <button onclick="setTheme('oled')" class="py-2 rounded-lg border border-zinc-800 bg-black text-white text-[11px]">OLED</button>
         </div>
       </div>
-
       <div class="space-y-1.5">
         <label class="text-[11px] font-medium text-slate-400">글꼴</label>
         <select id="font-family" onchange="applyStyle()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
           <option value="system">시스템 기본</option>
           <option value="myungjo">명조체 (나눔명조)</option>
-          <option value="gothic">고딕체 (본고딕)</option>
+          <option value="gothic">고딕체</option>
         </select>
       </div>
-
       <div class="space-y-1.5">
         <div class="flex justify-between text-[11px]">
           <span class="text-slate-400 font-medium">글자 크기</span>
@@ -388,7 +361,6 @@
         </div>
         <input id="font-size" type="range" min="15" max="28" value="18" oninput="applyStyle()" class="w-full accent-indigo-500">
       </div>
-
       <div class="space-y-1.5">
         <div class="flex justify-between text-[11px]">
           <span class="text-slate-400 font-medium">줄 간격</span>
@@ -440,7 +412,6 @@
       <div class="text-xs text-slate-300 space-y-1.5 leading-relaxed">
         <p>• 모든 책 데이터는 기기 내부에만 저장됩니다.</p>
         <p>• 서버로 전송되지 않습니다.</p>
-        <p>• 홈 화면과 서재가 분리되어 프라이버시를 보호합니다.</p>
       </div>
       <div class="text-right">
         <button onclick="closePrivacy()" class="px-3 py-1.5 bg-slate-800 text-white text-xs rounded-lg">확인</button>
@@ -449,13 +420,8 @@
   </div>
 
   <script>
-    // (이하 기존 JavaScript와 동일하게 유지)
-    // 위 CSS 변경만으로도 노치 대응이 크게 개선됩니다.
-    // 전체 스크립트는 이전 버전과 동일하게 사용하시면 됩니다.
-    // 필요하시면 전체 코드를 다시 요청해 주세요.
-
-    const DB_KEY = 'lumina_v5';
-    const SET_KEY = 'lumina_set_v5';
+    const DB_KEY = 'lumina_v6';
+    const SET_KEY = 'lumina_set_v6';
 
     let books = [];
     let currentId = null;
@@ -474,8 +440,562 @@
       updateClock();
     });
 
-    // ... (이전과 동일한 함수들)
-    // 전체 스크립트가 필요하시면 "전체 코드 다시 줘"라고 말씀해 주세요.
+    function loadSettings() {
+      try {
+        const s = JSON.parse(localStorage.getItem(SET_KEY) || '{}');
+        settings = { ...settings, ...s };
+      } catch(e){}
+      document.getElementById('font-family').value = settings.fontFamily;
+      document.getElementById('font-size').value = settings.fontSize;
+      document.getElementById('line-height').value = settings.lineHeight;
+      document.getElementById('font-size-label').textContent = settings.fontSize + 'px';
+      document.getElementById('line-height-label').textContent = settings.lineHeight;
+      setTheme(settings.theme, false);
+      applyStyle();
+    }
+    function saveSettings() {
+      localStorage.setItem(SET_KEY, JSON.stringify(settings));
+    }
+
+    function loadBooks() {
+      try { books = JSON.parse(localStorage.getItem(DB_KEY) || '[]'); } catch(e){ books = []; }
+      renderLibrary();
+      document.getElementById('home-count').textContent = books.length + '권';
+    }
+    function saveBooks() {
+      localStorage.setItem(DB_KEY, JSON.stringify(books));
+      document.getElementById('home-count').textContent = books.length + '권';
+    }
+
+    function switchView(name) {
+      ['home','library','reader'].forEach(v => {
+        document.getElementById('view-' + v).classList.toggle('hidden', v !== name);
+      });
+      if (name === 'library') renderLibrary();
+    }
+
+    function switchTab(t) {
+      tab = t;
+      document.getElementById('tab-reading').className = t === 'reading'
+        ? "flex-1 py-1.5 text-xs font-semibold rounded-md bg-indigo-600 text-white flex items-center justify-center gap-1.5"
+        : "flex-1 py-1.5 text-xs font-semibold rounded-md text-slate-400 flex items-center justify-center gap-1.5";
+      document.getElementById('tab-done').className = t === 'done'
+        ? "flex-1 py-1.5 text-xs font-semibold rounded-md bg-indigo-600 text-white flex items-center justify-center gap-1.5"
+        : "flex-1 py-1.5 text-xs font-semibold rounded-md text-slate-400 flex items-center justify-center gap-1.5";
+      renderLibrary();
+    }
+
+    // ===== 파일 처리 =====
+    async function handleFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const ext = file.name.split('.').pop().toLowerCase();
+      let raw = '';
+
+      document.body.style.cursor = 'wait';
+      try {
+        if (ext === 'txt') {
+          raw = await readText(file);
+        } else if (ext === 'md' || ext === 'markdown') {
+          raw = marked.parse(await readText(file));
+        } else if (ext === 'html' || ext === 'htm') {
+          raw = await readText(file);
+        } else if (ext === 'docx') {
+          const res = await mammoth.convertToHtml({ arrayBuffer: await file.arrayBuffer() });
+          raw = res.value;
+        } else if (ext === 'pdf') {
+          raw = await parsePDF(file);
+        } else if (ext === 'epub') {
+          raw = await parseEPUB(file);
+        } else {
+          raw = await readText(file);
+        }
+
+        if (!raw || raw.replace(/\s/g, '').length < 10) {
+          alert('읽을 수 있는 텍스트가 없습니다.');
+          return;
+        }
+
+        addBook(file.name.replace(/\.[^/.]+$/, ''), raw);
+      } catch (err) {
+        console.error(err);
+        alert('파일 처리 오류: ' + err.message);
+      } finally {
+        document.body.style.cursor = '';
+        e.target.value = '';
+      }
+    }
+
+    async function readText(file) {
+      const buf = await file.arrayBuffer();
+      const u8 = new Uint8Array(buf);
+      try {
+        return new TextDecoder('utf-8', { fatal: true }).decode(u8);
+      } catch {
+        try {
+          return new TextDecoder('euc-kr').decode(u8);
+        } catch {
+          return new TextDecoder('utf-8').decode(u8);
+        }
+      }
+    }
+
+    async function parsePDF(file) {
+      const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+      let text = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        let lastY = null, line = '';
+        content.items.forEach(it => {
+          const y = it.transform[5];
+          if (lastY !== null && Math.abs(y - lastY) > 4) {
+            text += line.trim() + '\n';
+            line = '';
+          }
+          line += it.str + (it.hasEOL ? '\n' : ' ');
+          lastY = y;
+        });
+        if (line.trim()) text += line.trim() + '\n\n';
+      }
+      return text;
+    }
+
+    async function parseEPUB(file) {
+      const zip = await JSZip.loadAsync(await file.arrayBuffer());
+      const container = await zip.file('META-INF/container.xml')?.async('text');
+      if (!container) throw new Error('EPUB 형식 오류');
+      const opfMatch = container.match(/full-path=["']([^"']+)["']/);
+      if (!opfMatch) throw new Error('OPF 없음');
+      const opfPath = opfMatch[1];
+      const opfDir = opfPath.includes('/') ? opfPath.replace(/\/[^/]+$/, '/') : '';
+      const opfText = await zip.file(opfPath).async('text');
+
+      const idrefs = [...opfText.matchAll(/<itemref[^>]+idref=["']([^"']+)["']/g)].map(m => m[1]);
+      const idToHref = {};
+      [...opfText.matchAll(/<item[^>]+id=["']([^"']+)["'][^>]+href=["']([^"']+)["']/g)].forEach(m => idToHref[m[1]] = m[2]);
+      [...opfText.matchAll(/<item[^>]+href=["']([^"']+)["'][^>]+id=["']([^"']+)["']/g)].forEach(m => idToHref[m[2]] = m[1]);
+
+      let full = '';
+      for (const id of idrefs) {
+        const href = idToHref[id];
+        if (!href) continue;
+        const entry = zip.file(opfDir + href) || zip.file(decodeURIComponent(opfDir + href));
+        if (!entry) continue;
+        try {
+          const html = await entry.async('text');
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          doc.querySelectorAll('script,style,nav').forEach(n => n.remove());
+          const t = doc.body?.innerText?.trim();
+          if (t) full += t + '\n\n';
+        } catch(e){}
+      }
+      if (!full.trim()) throw new Error('EPUB 본문 추출 실패');
+      return full;
+    }
+
+    // ===== 본문 처리 =====
+    function isDialogue(text) {
+      const t = text.trim();
+      if (t.length < 2) return false;
+      return (t.startsWith('「') && t.includes('」')) ||
+             (t.startsWith('“') && t.includes('”')) ||
+             (t.startsWith('"') && t.endsWith('"')) ||
+             (t.startsWith("'") && t.endsWith("'")) ||
+             (t.startsWith('‘') && t.includes('’'));
+    }
+
+    function splitMixedDialogue(text) {
+      const parts = [];
+      const re = /(「[^」]*」|“[^”]*”|"[^"]*"|'[^']*'|‘[^’]*’)/g;
+      let last = 0, m;
+      while ((m = re.exec(text)) !== null) {
+        if (m.index > last) {
+          const before = text.slice(last, m.index).trim();
+          if (before) parts.push({ type: 'p', text: before });
+        }
+        parts.push({ type: 'dialogue', text: m[0].trim() });
+        last = re.lastIndex;
+      }
+      if (last < text.length) {
+        const after = text.slice(last).trim();
+        if (after) parts.push({ type: 'p', text: after });
+      }
+      return parts.length ? parts : [{ type: isDialogue(text) ? 'dialogue' : 'p', text }];
+    }
+
+    function processContent(raw, title) {
+      const isHTML = /<[a-z][\s\S]*>/i.test(raw);
+      let blocks = [];
+
+      if (isHTML) {
+        const doc = new DOMParser().parseFromString(raw, 'text/html');
+        doc.querySelectorAll('script,style,noscript').forEach(n => n.remove());
+        const nodes = doc.body ? doc.body.querySelectorAll('h1,h2,h3,h4,p,div,li,blockquote') : [];
+        const seen = new Set();
+
+        nodes.forEach(el => {
+          if (seen.has(el)) return;
+          const tag = el.tagName.toLowerCase();
+          let text = (el.innerText || '').replace(/\s+/g, ' ').trim();
+          if (!text) return;
+          if (el.querySelector('p,h1,h2,h3,h4,div,li')) return;
+          seen.add(el);
+
+          if (['h1','h2','h3','h4'].includes(tag)) {
+            blocks.push({ type: 'h', text });
+          } else {
+            splitMixedDialogue(text).forEach(p => blocks.push(p));
+          }
+        });
+
+        if (blocks.length === 0) {
+          (doc.body?.innerText || '').split(/\n+/).forEach(line => {
+            line = line.trim();
+            if (line) splitMixedDialogue(line).forEach(p => blocks.push(p));
+          });
+        }
+      } else {
+        raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').forEach(line => {
+          line = line.trim();
+          if (line) splitMixedDialogue(line).forEach(p => blocks.push(p));
+        });
+      }
+
+      const chapterRe = /^(제\s*\d+\s*[장화편절]|Chapter\s*\d+|\d+\s*[화장편]|#{1,3}\s+.+$)/i;
+      let chapters = [];
+      let cur = { title: '본문', blocks: [] };
+
+      const push = () => {
+        if (cur.blocks.length) chapters.push({ id: 'ch' + chapters.length, title: cur.title, blocks: [...cur.blocks] });
+      };
+
+      blocks.forEach(b => {
+        if (b.type === 'h' && b.text.length < 80) {
+          push();
+          cur = { title: b.text, blocks: [] };
+        } else if (b.type === 'p' && chapterRe.test(b.text) && b.text.length < 70) {
+          push();
+          cur = { title: b.text, blocks: [] };
+        } else {
+          cur.blocks.push(b);
+        }
+      });
+      push();
+
+      if (chapters.length === 0) chapters = [{ id: 'ch0', title: '본문', blocks }];
+
+      let html = `<h1 class="doc-title">${esc(title)}</h1>`;
+      chapters.forEach(ch => {
+        html += `<h2 class="chapter-header" id="${ch.id}"><i data-lucide="bookmark" class="w-4 h-4"></i><span>${esc(ch.title)}</span></h2>`;
+        ch.blocks.forEach(b => {
+          if (!b.text) return;
+          if (b.type === 'dialogue' || isDialogue(b.text)) {
+            html += `<blockquote class="dialogue-card">${esc(b.text)}</blockquote>`;
+          } else {
+            html += `<p>${esc(b.text)}</p>`;
+          }
+        });
+      });
+
+      return { fullHtml: html, chapters: chapters.map(c => ({ id: c.id, title: c.title })) };
+    }
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ===== 서재 =====
+    function addBook(title, raw) {
+      const processed = processContent(raw, title || '제목 없음');
+      const book = {
+        id: 'b' + Date.now(),
+        title: title || '제목 없음',
+        date: new Date().toLocaleDateString(),
+        completed: false,
+        percent: 0,
+        html: processed.fullHtml,
+        chapters: processed.chapters
+      };
+      books.unshift(book);
+      saveBooks();
+      openBook(book.id);
+    }
+
+    function deleteBook(id, e) {
+      e.stopPropagation();
+      if (!confirm('이 책을 삭제할까요?')) return;
+      books = books.filter(b => b.id !== id);
+      saveBooks();
+      renderLibrary();
+    }
+
+    function renderLibrary() {
+      const list = document.getElementById('book-list');
+      const empty = document.getElementById('empty-state');
+      list.innerHTML = '';
+
+      const filtered = books.filter(b => tab === 'done' ? b.completed : !b.completed);
+      document.getElementById('badge-reading').textContent = books.filter(b => !b.completed).length;
+      document.getElementById('badge-done').textContent = books.filter(b => b.completed).length;
+
+      if (!filtered.length) {
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      filtered.forEach(b => {
+        const pct = Math.round(b.percent || 0);
+        const el = document.createElement('div');
+        el.className = 'bg-slate-800/60 border border-slate-700/50 rounded-xl p-3.5 active:scale-[0.99] cursor-pointer';
+        el.onclick = () => openBook(b.id);
+        el.innerHTML = `
+          <div class="flex justify-between gap-2">
+            <h3 class="text-sm font-semibold text-slate-100 line-clamp-2">${esc(b.title)}</h3>
+            <button onclick="deleteBook('${b.id}', event)" class="text-slate-500 hover:text-rose-400 p-0.5">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">${b.chapters.length}개 챕터 · ${b.date}</p>
+          <div class="mt-2.5 flex items-center gap-2">
+            <div class="flex-1 h-1 bg-slate-700 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-indigo-500 to-violet-500" style="width:${pct}%"></div>
+            </div>
+            <span class="text-[11px] text-indigo-400 font-mono">${pct}%</span>
+          </div>`;
+        list.appendChild(el);
+      });
+      lucide.createIcons();
+    }
+
+    // ===== 리더 =====
+    function openBook(id) {
+      const book = books.find(b => b.id === id);
+      if (!book) return;
+      currentId = id;
+      chapters = book.chapters || [];
+
+      document.getElementById('reader-title').textContent = book.title;
+      document.getElementById('reader-sub').textContent = `전체 ${chapters.length}개 챕터`;
+      document.getElementById('reader-content').innerHTML = book.html || '<p class="text-slate-400">내용 없음</p>';
+      lucide.createIcons();
+      applyStyle();
+      switchView('reader');
+
+      requestAnimationFrame(() => {
+        const sc = document.getElementById('reader-scroll');
+        if (book.percent > 1) {
+          sc.scrollTop = (sc.scrollHeight - sc.clientHeight) * (book.percent / 100);
+        } else {
+          sc.scrollTop = 0;
+        }
+        updateProgress();
+      });
+    }
+
+    function exitReader() {
+      saveProgress();
+      switchView('library');
+    }
+
+    function saveProgress() {
+      if (!currentId) return;
+      const book = books.find(b => b.id === currentId);
+      if (!book) return;
+      const sc = document.getElementById('reader-scroll');
+      const max = sc.scrollHeight - sc.clientHeight;
+      book.percent = max > 0 ? Math.min(100, (sc.scrollTop / max) * 100) : 0;
+      book.date = new Date().toLocaleDateString();
+      if (book.percent >= 96) book.completed = true;
+      saveBooks();
+    }
+
+    function updateProgress() {
+      const sc = document.getElementById('reader-scroll');
+      const max = sc.scrollHeight - sc.clientHeight;
+      const pct = max > 0 ? Math.min(100, (sc.scrollTop / max) * 100) : 0;
+      document.getElementById('progress-bar').style.width = pct + '%';
+      document.getElementById('progress-text').textContent = Math.round(pct) + '%';
+    }
+
+    function setupScroll() {
+      const sc = document.getElementById('reader-scroll');
+      const header = document.getElementById('reader-header');
+      const footer = document.getElementById('reader-footer');
+
+      sc.addEventListener('scroll', () => {
+        const y = sc.scrollTop;
+        updateProgress();
+        if (y > lastY && y > 40) {
+          if (!navHidden) {
+            header.classList.add('nav-hidden-top');
+            footer.classList.add('nav-hidden-bottom');
+            navHidden = true;
+          }
+        } else {
+          if (navHidden) {
+            header.classList.remove('nav-hidden-top');
+            footer.classList.remove('nav-hidden-bottom');
+            navHidden = false;
+          }
+        }
+        lastY = y;
+      }, { passive: true });
+    }
+
+    // ===== 테마 / 스타일 =====
+    function setTheme(t, save = true) {
+      settings.theme = t;
+      const view = document.getElementById('view-reader');
+      const header = document.getElementById('reader-header');
+      const footer = document.getElementById('reader-footer');
+
+      view.className = 'fixed inset-0 z-20 flex flex-col transition-colors duration-200';
+      view.classList.remove('theme-sepia');
+
+      if (t === 'dark') {
+        view.classList.add('bg-slate-900', 'text-slate-100');
+        header.style.background = 'rgba(15,23,42,0.95)';
+        footer.style.background = 'rgba(15,23,42,0.95)';
+      } else if (t === 'light') {
+        view.classList.add('bg-white', 'text-slate-900');
+        header.style.background = 'rgba(255,255,255,0.95)';
+        footer.style.background = 'rgba(255,255,255,0.95)';
+      } else if (t === 'sepia') {
+        view.classList.add('bg-sepia-100', 'text-sepia-900', 'theme-sepia');
+        header.style.background = 'rgba(244,236,216,0.95)';
+        footer.style.background = 'rgba(244,236,216,0.95)';
+      } else {
+        view.classList.add('bg-black', 'text-slate-200');
+        header.style.background = 'rgba(0,0,0,0.92)';
+        footer.style.background = 'rgba(0,0,0,0.92)';
+      }
+      if (save) saveSettings();
+    }
+
+    function applyStyle() {
+      const content = document.getElementById('reader-content');
+      settings.fontFamily = document.getElementById('font-family').value;
+      settings.fontSize = +document.getElementById('font-size').value;
+      settings.lineHeight = +document.getElementById('line-height').value;
+
+      document.getElementById('font-size-label').textContent = settings.fontSize + 'px';
+      document.getElementById('line-height-label').textContent = settings.lineHeight;
+
+      content.classList.remove('font-myungjo', 'font-gothic');
+
+      if (settings.fontFamily === 'myungjo') {
+        content.classList.add('font-myungjo');
+      } else if (settings.fontFamily === 'gothic') {
+        content.classList.add('font-gothic');
+      } else {
+        content.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif";
+      }
+
+      content.style.fontSize = settings.fontSize + 'px';
+      content.style.lineHeight = settings.lineHeight;
+      saveSettings();
+    }
+
+    // ===== TTS =====
+    function toggleTTS() {
+      document.getElementById('tts-bar').classList.toggle('hidden');
+    }
+    function ttsToggle() {
+      if (ttsOn) {
+        speechSynthesis.cancel();
+        ttsOn = false;
+        document.getElementById('tts-btn').innerHTML = '<i data-lucide="play" class="w-4.5 h-4.5 fill-current"></i>';
+      } else {
+        const text = document.getElementById('reader-content').innerText;
+        if (!text) return;
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ko-KR';
+        u.rate = ttsRate;
+        u.onend = () => {
+          ttsOn = false;
+          document.getElementById('tts-btn').innerHTML = '<i data-lucide="play" class="w-4.5 h-4.5 fill-current"></i>';
+          lucide.createIcons();
+        };
+        speechSynthesis.speak(u);
+        ttsOn = true;
+        document.getElementById('tts-btn').innerHTML = '<i data-lucide="pause" class="w-4.5 h-4.5 fill-current"></i>';
+      }
+      lucide.createIcons();
+    }
+    function setSpeed(r) {
+      ttsRate = r;
+      document.querySelectorAll('.speed-btn').forEach(b => {
+        b.classList.remove('bg-indigo-600', 'text-white');
+        b.classList.add('bg-slate-700');
+      });
+      event.target.classList.add('bg-indigo-600', 'text-white');
+      if (ttsOn) { ttsToggle(); ttsToggle(); }
+    }
+    function ttsMove(dir) {
+      document.getElementById('reader-scroll').scrollTop += dir * 400;
+      if (ttsOn) { speechSynthesis.cancel(); ttsOn = false; ttsToggle(); }
+    }
+
+    // ===== 모달 =====
+    function toggleSettings() {
+      document.getElementById('modal-settings').classList.toggle('hidden');
+    }
+    function toggleTOC() {
+      const m = document.getElementById('modal-toc');
+      m.classList.toggle('hidden');
+      if (!m.classList.contains('hidden')) {
+        const list = document.getElementById('toc-list');
+        list.innerHTML = '';
+        if (!chapters.length) {
+          list.innerHTML = '<p class="text-xs text-slate-400 text-center py-6">목차 없음</p>';
+          return;
+        }
+        chapters.forEach(ch => {
+          const btn = document.createElement('button');
+          btn.className = 'w-full text-left px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800 flex justify-between';
+          btn.innerHTML = `<span class="truncate">${esc(ch.title)}</span><i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-40"></i>`;
+          btn.onclick = () => {
+            document.getElementById(ch.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            toggleTOC();
+          };
+          list.appendChild(btn);
+        });
+        lucide.createIcons();
+      }
+    }
+
+    function openPaste() { document.getElementById('modal-paste').classList.remove('hidden'); }
+    function closePaste() { document.getElementById('modal-paste').classList.add('hidden'); }
+    function doPaste() {
+      const title = document.getElementById('paste-title').value.trim() || '붙여넣은 문서';
+      const body = document.getElementById('paste-body').value.trim();
+      if (!body) return alert('내용을 입력하세요');
+      closePaste();
+      addBook(title, body);
+      document.getElementById('paste-title').value = '';
+      document.getElementById('paste-body').value = '';
+    }
+
+    function openPrivacy() { document.getElementById('modal-privacy').classList.remove('hidden'); }
+    function closePrivacy() { document.getElementById('modal-privacy').classList.add('hidden'); }
+
+    function toggleComplete() {
+      if (!currentId) return;
+      const b = books.find(x => x.id === currentId);
+      if (!b) return;
+      b.completed = !b.completed;
+      saveBooks();
+      alert(b.completed ? '다 읽은 목록으로 이동' : '읽는 중 목록으로 이동');
+    }
+
+    function updateClock() {
+      const n = new Date();
+      const el = document.getElementById('clock');
+      if (el) el.textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+    }
   </script>
 </body>
 </html>
